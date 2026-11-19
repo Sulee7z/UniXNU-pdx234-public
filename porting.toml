@@ -7,6 +7,20 @@ os_profile = "ios-27.0.1-24A446-iphone14"
 summary = "Sony Xperia 1 V (XQ-DQ72), SM8550, D27 arm64e port. PDX071 is the current local candidate."
 
 [[area]]
+id = "selected-pdx071-source"
+status = "implemented"
+components = []
+paths = ["package/**", "ci/**", "scripts/**", "tests/**", "drivers/**", "profiles/**", "configs/**", "patches/**", "firmware/**", "board.toml", "feeds.toml", "unixnu.lock", ".github/workflows/**"]
+inputs = ["PDX071 native link plan and compiler dependency receipts; pinned OSS inputs and source exports."]
+configuration = ["The local candidate uses full graphics roots and the recorded arm64e pointer and Block ABI. The canonical resolver remains the bootstrap selection."]
+procedure = ["Compare the selected source hashes to package/selected071/source-manifest.json. Run source checks and the official porting record checker."]
+findings = ["The public exports contain the actual native and peripheral translation units used by PDX071. The 071 changes are in followup071; the prior radio and OLED source selection is retained for comparison."]
+completion = ["Imported sources, revisions and local modifications remain reviewable together with the candidate limits."]
+limits = ["Incremental replay relies on privately transferred original input artifacts. Full clean-checkout release integration is unfinished; no PDX071 handset outcome is recorded."]
+next_action = ["Migrate the selected archive recipes and Sony transport into the canonical configuration, then verify the full release from clean source."]
+evidence = [{kind = "source", reference = "package/selected071/source-manifest.json", result = "95 selected translation units and headers, with exact SHA-256 and source pins; proprietary firmware and platform identity are excluded."}]
+
+[[area]]
 id = "configuration"
 status = "implemented"
 components = ["ArmDTPlatform", "ArmCpu", "SoftwareAES", "XnuPrelink", "DarwinBoot"]

@@ -1,0 +1,506 @@
+{
+  "tag": "PDX071",
+  "source_files": [
+    {
+      "path": "native/recount.c",
+      "sha256": "e42a8c05c22603352777d88d35615ff9ec8d4084ff414aaddba2555400e0b42c",
+      "bytes": 50216
+    },
+    {
+      "path": "native/sched_clutch.c",
+      "sha256": "42f3a52fd840cf50b0c8f9a7ced0e3a764938d6093a224e39145527ce1e260ef",
+      "bytes": 277901
+    },
+    {
+      "path": "native/vm_shared_region_pager.c",
+      "sha256": "a1d5aa18e79b6ba16c9ca6aac27d3122981dc52648c206efab9567b5a7b91bb5",
+      "bytes": 55116
+    },
+    {
+      "path": "native/serial_general.c",
+      "sha256": "e5973695491628a6240148f7f6f7108b0c385a63fbe210c125737e3f031b3696",
+      "bytes": 5374
+    },
+    {
+      "path": "native/serial_console.c",
+      "sha256": "db71b6fdd9aa31f50a68124c438fcdea1f55e22ec65f0876a5375b665da49b52",
+      "bytes": 23897
+    },
+    {
+      "path": "native/machine_routines_apple.c",
+      "sha256": "b877b0a734791fa14f6a323c86f8ee50000a483d166926f87a53272e06e1bd00",
+      "bytes": 7593
+    },
+    {
+      "path": "native/sdt.c",
+      "sha256": "405dd84f57e8da6e93e9283a91157dc33f43ecd66512796e856db4183b991d02",
+      "bytes": 21689
+    },
+    {
+      "path": "native/vfs_cache.c",
+      "sha256": "8f7636037c89f0d7433599789f78ddc6918acc94b9375fc54237d1338c99cb13",
+      "bytes": 97931
+    },
+    {
+      "path": "native/bsd_init.c",
+      "sha256": "cf93b19ce3d001fed1e1071b3f3749ddec74a142510e9848e65f514a44c89e52",
+      "bytes": 53464
+    },
+    {
+      "path": "native/kern_exec.c",
+      "sha256": "e1a49612017f42bf61bc4726fb6dbd8ba98a0757b5800d92b15de38933a452ee",
+      "bytes": 343756
+    },
+    {
+      "path": "native/kern_shutdown.c",
+      "sha256": "5d3d16070df3a6c21594e3bcb96931921944f3e915ff98152ebf48275afebef7",
+      "bytes": 20365
+    },
+    {
+      "path": "native/systemcalls.c",
+      "sha256": "fad6c4f631667a80178daf1ca3f873ccc28d29e09b4f5ee086ee138d01dc7689",
+      "bytes": 23005
+    },
+    {
+      "path": "native/OSMetaClass.cpp",
+      "sha256": "3710727a83d531039049ce3859551b8fb3819ee7c545eccff0431bee8c96363a",
+      "bytes": 48406
+    },
+    {
+      "path": "native/OSKext.cpp",
+      "sha256": "f9b7b4c488e5399e7e6cf076855f214faeba81891e1eac9a1f25bd67a0c9a371",
+      "bytes": 520666
+    },
+    {
+      "path": "native/pe_kprintf.c",
+      "sha256": "232cdbc6fb142f2aa7a55cd7107c24ddaad40dc817b2bebe6d50d3f9073de047",
+      "bytes": 5077
+    },
+    {
+      "path": "native/mac_vfs.c",
+      "sha256": "8a9f977caad043f50d0eb8781fc98fe3f4a066a06fe944ec9073e295580b2353",
+      "bytes": 76591
+    },
+    {
+      "path": "native/IOUserClient.cpp",
+      "sha256": "5ea9d10aa386cc0b6835981eabf37802c783621c1943209721e0f239a593bd23",
+      "bytes": 183748
+    },
+    {
+      "path": "native/locore.s",
+      "sha256": "5798fdcd2fea4270c63414efc8c741dfebe7f017ab5341b9a3ad36561676d560",
+      "bytes": 85895
+    },
+    {
+      "path": "native/machine_routines_asm.s",
+      "sha256": "e75b634eb8a799096637ae6ba14c575397b41fcc9f571df3a69e224ce24934c8",
+      "bytes": 55461
+    },
+    {
+      "path": "native/vfs_syscalls.c",
+      "sha256": "faeeec98a045903196fa5defe437cf8fbda92e5c6905e1bafa433dab5b56d6c1",
+      "bytes": 396317
+    },
+    {
+      "path": "native/IOWorkLoop.cpp",
+      "sha256": "3e036feb886054e10b08e3e4c837ef812c511cbac3c6ade0fa2b4cafeb14bce3",
+      "bytes": 19563
+    },
+    {
+      "path": "native/debug.c",
+      "sha256": "6c98ac903875b031123588be23061588b9ed29125a2662404a03b93df918d51d",
+      "bytes": 82938
+    },
+    {
+      "path": "native/startup.c",
+      "sha256": "c8c0cd6fe97d5fb5fdc4dd2ac269f1d707dcefb2ec473f8acd196aa143858359",
+      "bytes": 31224
+    },
+    {
+      "path": "native/kern_exit.c",
+      "sha256": "82ece75c6f15ec263388e03d09c35e49934e8825b604dd1a73d53bf7ed477278",
+      "bytes": 128656
+    },
+    {
+      "path": "native/BootLog.c",
+      "sha256": "dc94324ccaec5570f54f68aeb1b9097af0aa6e720ca077c2efdcad8fc631e17f",
+      "bytes": 213449
+    },
+    {
+      "path": "native/BootWatchdogPolicy.c",
+      "sha256": "097e0d085ec60e9357b20bd3088a7f96cab1c092dea46e65a519c10ae1c4f568",
+      "bytes": 12823
+    },
+    {
+      "path": "radio/ArmCpu069.cpp",
+      "sha256": "b6b37a0afaee9ffbe8727e4a56c6a18842a1b00d926fd8e46310370f6ab03564",
+      "bytes": 44550
+    },
+    {
+      "path": "radio/BluetoothFirmware.c",
+      "sha256": "4dfd9fbf9f12d200124409c479126d21417fb035805cd92e90f5ddaee1e3daf3",
+      "bytes": 2534
+    },
+    {
+      "path": "radio/BluetoothFirmware.h",
+      "sha256": "f7de07a08ae060645a36a5d543ce29ba130166d1700858bacccb4d2f1c736014",
+      "bytes": 573
+    },
+    {
+      "path": "radio/BluetoothProbe.cpp",
+      "sha256": "9a553db38c8344c47fdc272d7f698acb16c461fd44306788d7334b1b9e191c70",
+      "bytes": 31402
+    },
+    {
+      "path": "radio/BootResetCore.h",
+      "sha256": "fac5201eeafbb52b39b5046cdc6c22a55254b1b33b28d4e4ae237797fa1b08e4",
+      "bytes": 4816
+    },
+    {
+      "path": "radio/MhiBoot.h",
+      "sha256": "6ab6748885a1e042a240aacd1000432ce4325dda4c8c0a0b8b98af476717ee5d",
+      "bytes": 4512
+    },
+    {
+      "path": "radio/QcomQmp.c",
+      "sha256": "6d5dd2e0ebf1f425f7fc929555edb275b8d499cfaa1f9c887bfcb68f09785249",
+      "bytes": 3350
+    },
+    {
+      "path": "radio/QcomQmp.h",
+      "sha256": "dd6722ade248435930c5f242ef78728f58f7e3bc6a9765fe229b32c87f342503",
+      "bytes": 2008
+    },
+    {
+      "path": "radio/QcomRpmh.c",
+      "sha256": "679a55467e6ed4c7e75a8191f1d6da48637377088ef5e27879b1c99bc4a62314",
+      "bytes": 4602
+    },
+    {
+      "path": "radio/QcomRpmh.h",
+      "sha256": "47e299744ff83989449d262f74f5dfd2ba1cdbf921b2886643735f2febb6ee21",
+      "bytes": 2480
+    },
+    {
+      "path": "radio/Sm8550AppsSmmu.c",
+      "sha256": "52bfed6be3d02ee9cb27469cd2af711eb2c1514675db051139b2784ba3fad464",
+      "bytes": 4308
+    },
+    {
+      "path": "radio/SmmuBypass.h",
+      "sha256": "450f59f9e305e73add8de3e3a7bd1c7f1d155fdd6b1f284b60ec3d4d958e92b8",
+      "bytes": 4810
+    },
+    {
+      "path": "radio/SonyBoard2.c",
+      "sha256": "7e6dbbf901e3b02640d22920ae9506a779b8764f75927b167d116a6109a82218",
+      "bytes": 4569
+    },
+    {
+      "path": "radio/SonyBoard2.h",
+      "sha256": "4576eefa78fe6290cd26342e081f62b571a7aa6415e9bcb39fe05e38642c11aa",
+      "bytes": 599
+    },
+    {
+      "path": "radio/SonyCommandDb.c",
+      "sha256": "4f3d2dd62e9c410cb4d050b59b0e86e5f6bbf359ea2456d71349b8dd184ee260",
+      "bytes": 2694
+    },
+    {
+      "path": "radio/SonyCommandDb.h",
+      "sha256": "d7a776da61a320093f7e341a2bc7cd0935551e57a0ea401e18dec7b1056566af",
+      "bytes": 530
+    },
+    {
+      "path": "radio/SonyDma.cpp",
+      "sha256": "aefcfae63e57b57afe64134eb530a19acd49532018ceb1179bac292adb4d5924",
+      "bytes": 1848
+    },
+    {
+      "path": "radio/SonyFirmware.generated.h",
+      "sha256": "9db521521607be5077bb7a58deed72869849d8f7befe4377a14ab20a744e9529",
+      "bytes": 10016
+    },
+    {
+      "path": "radio/SonyIts.c",
+      "sha256": "28678237c85e0903cefe3903074ae940e009637d80a1bbac09bc18e9588d60be",
+      "bytes": 11942
+    },
+    {
+      "path": "radio/SonyIts.cpp",
+      "sha256": "a66a85f96385871cd4ff08800fd3f14a333133045d1045e92eb7707ba3cd5b35",
+      "bytes": 13608
+    },
+    {
+      "path": "radio/SonyIts.h",
+      "sha256": "6a46a3b8ac7f9eb2f38b0894b4feef4f5be4448e7dddf14d5519f095c4973bf3",
+      "bytes": 6882
+    },
+    {
+      "path": "radio/SonyResources.generated.h",
+      "sha256": "314b9d0ec57615c07bc1144e956ed50eb70c8bc91308e61b36e3efa98c586d33",
+      "bytes": 3324
+    },
+    {
+      "path": "radio/SonyRpmh.c",
+      "sha256": "0343845d8c9f61bfcba5398b83a59905d56595b7516d7361435d27a266559da7",
+      "bytes": 4472
+    },
+    {
+      "path": "radio/SonyRpmh.h",
+      "sha256": "bb1e88b535d89899e504cd3c02d641de6c474dc2f0ae81aa36c1fdf56a560387",
+      "bytes": 1314
+    },
+    {
+      "path": "radio/SonySharedResources.cpp",
+      "sha256": "6f94cdfc2af3f03017993f98bfe3eb68360c6a382133a9940757096f8abcf906",
+      "bytes": 11316
+    },
+    {
+      "path": "radio/SonySharedResources.h",
+      "sha256": "5fa6f556d39478a815e8b8e44f30f167e1311a5c8b33d21eed7c1a1466755045",
+      "bytes": 2520
+    },
+    {
+      "path": "radio/SonyVotes.c",
+      "sha256": "35520e097ae70bdc51b6422817ef54105c7ff5bebc2baddba30d71674389a584",
+      "bytes": 5860
+    },
+    {
+      "path": "radio/SonyVotes.h",
+      "sha256": "32e000bfb1c7b5f67b96038363403238be656a478f6c6581464fa8fa66dffdc2",
+      "bytes": 1299
+    },
+    {
+      "path": "radio/SonyWcnBoard.h",
+      "sha256": "f3530da5e2b79d91812903a4da42834dff0b48f12e5d70b99271c5cda95bd9af",
+      "bytes": 2919
+    },
+    {
+      "path": "radio/SonyWcnPlatform.h",
+      "sha256": "d1cfd15be0d9d326ba774512d9a0ea929e3c035f695d5cbd9521abcca2a797d1",
+      "bytes": 2774
+    },
+    {
+      "path": "radio/SonyWcnPower.h",
+      "sha256": "eb62bba22550a59dcd61eabd8163391b43633b308e1e78e10d631ae18c6ff990",
+      "bytes": 1451
+    },
+    {
+      "path": "radio/SonyWcnQualification.c",
+      "sha256": "0004d02bdfc53933ec1753138751da33f4f51773fc57238c5bed26bd847ac432",
+      "bytes": 2417
+    },
+    {
+      "path": "radio/SonyWifiAddress069.cpp",
+      "sha256": "273ec504995c6c5119c47648e1d6a1dcc9994a3fa998e55e4c9b01ed9fa0823a",
+      "bytes": 3362
+    },
+    {
+      "path": "radio/SonyWifiDma.cpp",
+      "sha256": "21b619b3231c79b6d79a6712705d65ec05ded0afc19a8119eb87cce2ddc356f0",
+      "bytes": 8070
+    },
+    {
+      "path": "radio/SonyWifiDmaTables.c",
+      "sha256": "1860c121799e7f62aa7778a5712ca968c7599d5242d28095854c97ec0a187803",
+      "bytes": 1645
+    },
+    {
+      "path": "radio/SonyWifiDmaTables.h",
+      "sha256": "fdd21ff9cd24f8af892bddf86ee907d265f8369a9e94ea1aec680be4de8b82b4",
+      "bytes": 865
+    },
+    {
+      "path": "radio/WifiFirmware.c",
+      "sha256": "07afaf43f0cce9dfee245bfb1575fb53bf79b7ed3d8d74cff5898ec14f1c373d",
+      "bytes": 2179
+    },
+    {
+      "path": "radio/WifiFirmware.h",
+      "sha256": "04ebde2cc2518ceb217c23d96b6e1d09515c0f52c97de41f04961a0360573bc3",
+      "bytes": 527
+    },
+    {
+      "path": "radio/WifiPcieTables.h",
+      "sha256": "f21a8bda7c217cd2febc535a052d881a9920332ff6168cdcbb12a9c11f947b62",
+      "bytes": 2257
+    },
+    {
+      "path": "radio/WifiProbe.cpp",
+      "sha256": "b6559ee27cd0f0bb63ac30c5d7ab1eceffaf6e06ae5351e6bf3b17957592b100",
+      "bytes": 82260
+    },
+    {
+      "path": "radio/core.c",
+      "sha256": "449da98dde3df3df2b523d2651093a7ea2dac0d37b8b37e576555b28534b7476",
+      "bytes": 53794
+    },
+    {
+      "path": "radio/qmi.c",
+      "sha256": "c353802082f99a9d40ea49638289fdc3b299d37add7470a8decaa4da742c6516",
+      "bytes": 105963
+    },
+    {
+      "path": "oled/Backlight069.cpp",
+      "sha256": "969c4bd07c218869283eb6089d3f03fdfc6b51bcea0935ae8d577a9aef636c13",
+      "bytes": 9571
+    },
+    {
+      "path": "oled/BacklightMode069.m",
+      "sha256": "3faa76b85ca104d4c810b2dd6ab74823a645381338fb44aa2c4995823e7d2918",
+      "bytes": 3161
+    },
+    {
+      "path": "oled/Display069.c",
+      "sha256": "d62df1bbd2a1210c3ef3dbe7f51e40c24c31259cfc6a09f2ffc8b2e9189b3b4a",
+      "bytes": 20876
+    },
+    {
+      "path": "oled/Display069.h",
+      "sha256": "0e1aab221abe3bac09466cf5cd5fd99c32665f286bdaf8db4e71045f3f6825a4",
+      "bytes": 3517
+    },
+    {
+      "path": "oled/Native069.cpp",
+      "sha256": "e2dbc5d9f186d274508c46bac13f6e722b8fc8800d86b953306ecfad74c9a429",
+      "bytes": 14068
+    },
+    {
+      "path": "oled/Native069.h",
+      "sha256": "225e8fdfb36b49f716c6b7fde6783be48457be44f85e776aed90a20f7771a458",
+      "bytes": 480
+    },
+    {
+      "path": "oled/Resources069.c",
+      "sha256": "27687e70f17ab2f08079a041ce42c95e182efc5e50712719b40e75e0fc4ed3c7",
+      "bytes": 5203
+    },
+    {
+      "path": "oled/Resources069.h",
+      "sha256": "dc7fa3b863bf5429b9ded14b920c6a2930894cfdbdf90981789c1ec2eea59551",
+      "bytes": 1498
+    },
+    {
+      "path": "owners/ArmCpu.cpp",
+      "sha256": "b6b37a0afaee9ffbe8727e4a56c6a18842a1b00d926fd8e46310370f6ab03564",
+      "bytes": 44550
+    },
+    {
+      "path": "owners/LegacyDisplayProbe.cpp",
+      "sha256": "83dea3135e271d30ba1335445918a77d97480d4da7a9c0324203fd2ad86afd8b",
+      "bytes": 50212
+    },
+    {
+      "path": "owners/NativeLegacyDisplay.cpp",
+      "sha256": "d1bb9669c1a41588ed4a09b717208fcee7bf81246151cb37024a12a0a0de3e65",
+      "bytes": 89638
+    },
+    {
+      "path": "owners/NativeUfs.cpp",
+      "sha256": "0494be76124fe19c1f29ad98e7ca9babf39daf038f49f083c32165b67d564746",
+      "bytes": 154147
+    },
+    {
+      "path": "owners/SonyTouch.cpp",
+      "sha256": "ae9f7b46555f69ae1e2b59b6aa4c60427b63ad1d0fde0144cfb042b6ad780746",
+      "bytes": 28073
+    },
+    {
+      "path": "bluetooth-userland/BlueTool.c",
+      "sha256": "452fbd09d87ef97d4e0537458650122f8e1d3a26bcffb7d99b10c8806bf0481c",
+      "bytes": 3156
+    },
+    {
+      "path": "bluetooth-userland/Type0.c",
+      "sha256": "ee4f333b3fbe6c2964e222067f20991e3f4421446606ded2375d976958e7a045",
+      "bytes": 8666
+    },
+    {
+      "path": "bluetooth-userland/qbt_ios27_layout.h",
+      "sha256": "bbd1d50b7be490000dbbf8cf2543a59456c7c8444e42b00eaaaa72ce5da2d695",
+      "bytes": 3274
+    },
+    {
+      "path": "wifi-userland/driver_sheng.c",
+      "sha256": "75d615f2b89193858f6918e2fdc298445c6949ae657c1e037ff9861f1afc9672",
+      "bytes": 26501
+    },
+    {
+      "path": "wifi-userland/l2_packet_sheng.c",
+      "sha256": "f233302ed2f7288c210607974b4cf5eb2983d17c4b0347c4a6d32e675c292b18",
+      "bytes": 1923
+    },
+    {
+      "path": "wifi-userland/nw_control_client.c",
+      "sha256": "9443823ce06bed2155e34c314da7ac95fe90a574dabe136b6f758c98dbe6a7ab",
+      "bytes": 9265
+    },
+    {
+      "path": "wifi-userland/nw_control_client.h",
+      "sha256": "c6625abe9dcd4353b679dfe794a3eeb57836b30b67a1901b90be923465e0e54e",
+      "bytes": 1747
+    },
+    {
+      "path": "wifi-userland/nw_darwin_control.h",
+      "sha256": "4511a5254617ca0898c9dc47827b07a12c8c2332e3f5b77adb2e62a35ae9e084",
+      "bytes": 720
+    },
+    {
+      "path": "wifi-userland/nw_supplicant_frontend.c",
+      "sha256": "a63b31d65c2c92a24c4ffe0355f1aa50ebb478c7ffbc6a7477eb1b7cb1ac8c26",
+      "bytes": 6757
+    },
+    {
+      "path": "wifi-userland/nw_supplicant_frontend.h",
+      "sha256": "ec1935eddefcfe06a6addf9fdc701d41fb44c1457eaf11ba957b6f8e3c69706c",
+      "bytes": 316
+    },
+    {
+      "path": "wifi-userland/nw_wireless_event.c",
+      "sha256": "edcfbca111d2dacc136d075a51e2a96930deeeeb36c2ea80e9e4bb9fccdd15bf",
+      "bytes": 5416
+    },
+    {
+      "path": "followup071/SonyWifiDma.cpp",
+      "sha256": "caa158789bbb1c4f34cdc63ac4f2b1a7821918bf7f4931371ca140d689761843",
+      "bytes": 8654
+    },
+    {
+      "path": "followup071/Sm8550AppsSmmu.c",
+      "sha256": "4292eb8b55c840a1f3b7cabe9a4105b160c9ac5d0118bfe799785d27933132b1",
+      "bytes": 4324
+    },
+    {
+      "path": "followup071/Resources069.c",
+      "sha256": "16e77e285e01cbe48fe8409577db532a6f33cece5ba1e41f29d962fd731e44ec",
+      "bytes": 5919
+    }
+  ],
+  "xnu_source": "ac9718fb1af618d5ce8678d0dc6e8a58f252216f",
+  "core": "82b847c4ac3f68a57024b3082ffa3a03442defd9",
+  "audited_core": "563595abedfdfa413ad583b66b6176d82007e633",
+  "sheng_reference": "c8f92b208068eeaa4cd2b0f592671f04ee70076e",
+  "radio_pins": {
+    "sheng": "6c42e1055ffb3b335fda991190ad221edaa7af3c",
+    "Ath12kWifi": "84e02e0c0a3354c341c76affef582c7c41883f1f",
+    "QcaBluetooth": "fa528145aee3073c47533d74ea260eb2818b6b63"
+  },
+  "display_pins": {
+    "GopFramebuffer": "b0d812d578efa2acb005b66f73168891719af09a",
+    "AppleKeyStoreState": "42ff83e08b2265fe741d4adaf084bebe003452ba"
+  },
+  "gpu_pins": {
+    "drivers/Adreno740": "653e11c8392490b191fc163881005f756ecfd896",
+    "drivers/AdrenoMetal": "243d63cf43305a85c8119b66b49cb7df4b30b019",
+    "kits/AdrenoFirmware": "20ad3d7aca14bd46aecab6335c780f5413fa054b",
+    "kits/AdrenoPM4": "282606b528b2595bc4274ea7490b62b323f35a5f",
+    "kits/ArmSmmu4K": "83969cd874503e65997ff7639f7dcf3d0a92cd17"
+  },
+  "private_binaries_included": false,
+  "cold_source_rebuild_qualified": false,
+  "compiled_target": "arm64e-apple-ios27.0",
+  "block_descriptor_abi": "DA/address/0xc0bb",
+  "pointer_type_discrimination": true,
+  "plan_sha256": "496560868ae3e8290dfba9541f1d57e5ec854775a8c4be3ad86b9bd957b05fdf"
+}

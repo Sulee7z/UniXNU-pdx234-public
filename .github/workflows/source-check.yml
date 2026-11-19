@@ -1,0 +1,31 @@
+name: Source checks
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  source-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate selected-source hashes
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, pathlib
+          root = pathlib.Path('package/selected071')
+          record = json.loads((root / 'source-manifest.json').read_text())
+          for row in record['source_files']:
+              path = root / row['path']
+              assert path.stat().st_size == row['bytes'], row['path']
+              assert hashlib.sha256(path.read_bytes()).hexdigest() == row['sha256'], row['path']
+          print('Verified', len(record['source_files']), 'selected files')
+          PY
+      - name: Run platform host tests
+        run: python3 -B -m unittest discover -s tests -p '*069.py'
