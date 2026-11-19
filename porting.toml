@@ -18,7 +18,7 @@ findings = ["The public exports contain the actual native and peripheral transla
 completion = ["Imported sources, revisions and local modifications remain reviewable together with the candidate limits."]
 limits = ["Incremental replay relies on privately transferred original input artifacts. Full clean-checkout release integration is unfinished; no PDX071 handset outcome is recorded."]
 next_action = ["Migrate the selected archive recipes and Sony transport into the canonical configuration, then verify the full release from clean source."]
-evidence = [{kind = "source", reference = "package/selected071/source-manifest.json", result = "95 selected translation units and headers, with exact SHA-256 and source pins; proprietary firmware and platform identity are excluded."}]
+evidence = [{kind = "source", reference = "package/selected071/source-manifest.json", result = "135 selected translation units and headers, with exact SHA-256 and source pins; proprietary firmware and platform identity are excluded."}]
 
 [[area]]
 id = "configuration"

@@ -462,6 +462,206 @@
       "bytes": 5416
     },
     {
+      "path": "metal-userland/CacheExport.h",
+      "sha256": "c952430f856edfcc1276726d647aa3fdc0ac425d69981a2487d32abe1f9ffea6",
+      "bytes": 17362
+    },
+    {
+      "path": "metal-userland/D27DlopenDiagnostic.h",
+      "sha256": "4796f976ed671302ae2d3873fe9840ea9fa8fa4927d086c6645c6eacc671c9e1",
+      "bytes": 4148
+    },
+    {
+      "path": "metal-userland/D27MetalStartup.h",
+      "sha256": "0387f0677f07aaced75fe2d1a8e4cb5d6fc2a5db963f246f51eddc453ef765e5",
+      "bytes": 2140
+    },
+    {
+      "path": "metal-userland/ExceptionDiag.h",
+      "sha256": "86bc694b8b93dd450cbf081c6d44f01742565d2132a020846f41ed2a072e118e",
+      "bytes": 2295
+    },
+    {
+      "path": "metal-userland/GpuScanoutClient.h",
+      "sha256": "1ac37cd05b90e1bc14be1aa28e155489f78c77dbaa2fa0d5bca9b6d1b457049c",
+      "bytes": 7962
+    },
+    {
+      "path": "metal-userland/GpuScanoutPresenter.h",
+      "sha256": "ddbafdb494788350806ead7abafb6a1c7ec2712e1ccb5a4c60f74f6c4d24e3ce",
+      "bytes": 12636
+    },
+    {
+      "path": "metal-userland/HostMetalCommandServer.h",
+      "sha256": "8cfd04e1231659dce2a487013aa41a8e447e9703eb6eaebe443380bbf60eece3",
+      "bytes": 223
+    },
+    {
+      "path": "metal-userland/HostMetalCommandServer.mm",
+      "sha256": "681945e0fd66b1d7e11ce6865bd0237ae21f9f658f8b54c194f9a2991369bef8",
+      "bytes": 59947
+    },
+    {
+      "path": "metal-userland/NativeAdrenoMetalPlugin.mm",
+      "sha256": "c37adaff894396078395a71899e572c6235b186cf393175a78fffaa0110af0c0",
+      "bytes": 33385
+    },
+    {
+      "path": "metal-userland/NativeAdrenoProbeDaemon.cpp",
+      "sha256": "c580c7c637f3677643f2ace76b78458008a90d6ce9a36126ea75922c21b6f65a",
+      "bytes": 1436
+    },
+    {
+      "path": "metal-userland/NativeAdrenoUserTest.h",
+      "sha256": "6cd762e0dce1ab37b7365b45d97898e88bb0cb84effbd5443abcfabf4292795d",
+      "bytes": 35158
+    },
+    {
+      "path": "metal-userland/NativeBridgeMetalFrontend.h",
+      "sha256": "666b18fdde902b844ee9504cbf7704713fedc8400fa3e1ceceecc3e44ef8f143",
+      "bytes": 2670
+    },
+    {
+      "path": "metal-userland/NativeBridgeMetalFrontend.mm",
+      "sha256": "bbd6853f1c82d5f75747e6186cb8ef140e735b43ddc097268d650ce4a465199e",
+      "bytes": 329449
+    },
+    {
+      "path": "metal-userland/NativeGpuLatency.h",
+      "sha256": "6d090da81c80bf23f0ea875dbf5fd41acb4072c93e9d223172165f95528cf709",
+      "bytes": 1885
+    },
+    {
+      "path": "metal-userland/NativeGpuTrace.h",
+      "sha256": "7636d053085adfdc8e15a69241f6f6a3399af2802c4fd93d05eb2a01275d1e65",
+      "bytes": 1808
+    },
+    {
+      "path": "metal-userland/NativeIOGPUProviderProbe.cpp",
+      "sha256": "e62fcf1015edffe596c79cc0b42bf24228051234e092bcf22b4bdea2e1136c0c",
+      "bytes": 3793
+    },
+    {
+      "path": "metal-userland/NativeMetalBridgePhase.h",
+      "sha256": "796cf647f46a99c6b7744ae82e8f9ff8394b849dabb9e66bc32cdff66036ec46",
+      "bytes": 10585
+    },
+    {
+      "path": "metal-userland/NativeOfflineAccelerator.cpp",
+      "sha256": "c9afd3dc3b0924370232f9da04273d5aabe0274f5cd624af65882f3fb7cabe33",
+      "bytes": 753
+    },
+    {
+      "path": "metal-userland/NativeOfflineGPU.cpp",
+      "sha256": "e443cc4a7001cc1f8f9d05e940b6776fbc14fe07198eaf6fd0378aa4f480047f",
+      "bytes": 21143
+    },
+    {
+      "path": "metal-userland/NativeOsLogExport.mm",
+      "sha256": "fcfb808fd7ddf742f626dcddbc2733b0335727b6c9b607f287fe2e46e7d659e4",
+      "bytes": 5044
+    },
+    {
+      "path": "metal-userland/NativeTurnipSmoke.h",
+      "sha256": "2f48988a76e9259505523b8e02be4ae8444696ab26b57032846a2d955aafe4b1",
+      "bytes": 35369
+    },
+    {
+      "path": "metal-userland/NativeTurnipSwapTest.h",
+      "sha256": "a1fd679518e2a0d72e8ebb8a3d730048f18e56047fdca4aebe27a106a8e1e1e6",
+      "bytes": 23682
+    },
+    {
+      "path": "metal-userland/OfflineMetalCommandWire.h",
+      "sha256": "414efa751a89014242c5399d82390ea4764d7463c8a854856840078ccfe17f9a",
+      "bytes": 546
+    },
+    {
+      "path": "metal-userland/OfflineMetalDepthStencilWire.h",
+      "sha256": "0eb7dde2abd1700d7338d2cee02f2443192d624a51824fbeb0a35f95a72a69f6",
+      "bytes": 1191
+    },
+    {
+      "path": "metal-userland/OfflineMetalEventWire.h",
+      "sha256": "081d6e455aa7bf2b5639b24f9b2fde2cbc4dbc90aad9e0729bc32d0e4e938228",
+      "bytes": 516
+    },
+    {
+      "path": "metal-userland/OfflineMetalFenceWire.h",
+      "sha256": "e56f167263263963c54bd8c1498e30e4a1fcb0524e0397b3a074a95c809a2485",
+      "bytes": 663
+    },
+    {
+      "path": "metal-userland/OfflineMetalFrontend.mm",
+      "sha256": "9452728b47789ee99ae29a7a8898016edb333a7eb058ff88ccc40b1fe6b23e56",
+      "bytes": 75688
+    },
+    {
+      "path": "metal-userland/OfflineMetalFunctionWire.h",
+      "sha256": "1102f8b9ab25edcddd1f4ec9c8d0007047a25c7f2bf8c4c8b10681575f031393",
+      "bytes": 1362
+    },
+    {
+      "path": "metal-userland/OfflineMetalPlugin.mm",
+      "sha256": "7234772c6af6e2c5aec185f1d4a66c77f240c62b5edab006ec31441d66371c61",
+      "bytes": 1987
+    },
+    {
+      "path": "metal-userland/OfflineMetalQueueWire.h",
+      "sha256": "8d82bdc86d43027825e6d227347c0a8aedce89ec28c62bdaac8b4ea95b33f143",
+      "bytes": 420
+    },
+    {
+      "path": "metal-userland/OfflineMetalSessionWire.h",
+      "sha256": "03d6ac0bec83be6f35895af80b4bb45513e300fca357f155ec0155da9facb9bb",
+      "bytes": 461
+    },
+    {
+      "path": "metal-userland/OfflineMetalSharedEventWire.h",
+      "sha256": "45c7daa2c1de61ca758c4be56b80e7cbfd34475c7da46f8fe8ce8a4ef5e1b747",
+      "bytes": 893
+    },
+    {
+      "path": "metal-userland/OfflineMetalTextureWire.h",
+      "sha256": "bf898f4d940ffc99812ce6df8244f8099ff76efcf113cb95e6fc9b031a289451",
+      "bytes": 551
+    },
+    {
+      "path": "metal-userland/OfflineMetalVertexWire.h",
+      "sha256": "bebf27559082c7742cbf5e40780c10b3044966a866e95a5f2c7efb734ace76b3",
+      "bytes": 1848
+    },
+    {
+      "path": "metal-userland/OfflineMetalWire.h",
+      "sha256": "8c52d55df800c7d60a62c647fd2cb69208f1be2d4571b152384e0ca657dabf95",
+      "bytes": 2781
+    },
+    {
+      "path": "metal-userland/OriginalAcceleratorABI.h",
+      "sha256": "211e922f9b760ddec2e3453db6584bac57597b3d39e4bf0d013c1b2debd53365",
+      "bytes": 574
+    },
+    {
+      "path": "metal-userland/OriginalGPUProviderABI.h",
+      "sha256": "e7c7c25f4ad8c909e78ae1bb647cccd12fb3201d2787157e610b3d9a03b269c5",
+      "bytes": 2698
+    },
+    {
+      "path": "metal-userland/PrimeShaders.h",
+      "sha256": "11054272a6052363e6fd02d548fbb4b5397079214a1c04dff5b2cdb67d9d872a",
+      "bytes": 20600
+    },
+    {
+      "path": "metal-userland/QueuePriority.h",
+      "sha256": "1134fb8175b9a61fcbfcec73a18ccf8d693c16513779d86cd97037d5c729e2d2",
+      "bytes": 878
+    },
+    {
+      "path": "metal-userland/SharedShaderCache.h",
+      "sha256": "3fee1e3196c6b4eb031ecdd78c0df07fb53604d067f3354adb676e9df984cba5",
+      "bytes": 1655
+    },
+    {
       "path": "followup071/SonyWifiDma.cpp",
       "sha256": "caa158789bbb1c4f34cdc63ac4f2b1a7821918bf7f4931371ca140d689761843",
       "bytes": 8654

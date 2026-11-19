@@ -12,7 +12,7 @@ Use the pinned `UniXNU/UniXNU` revision `563595abedfdfa413ad583b66b6176d82007e63
 
 The Sony UEFI source overlay is in `firmware/sony-overlay/`. The upstream UEFI tree, prepared Sony firmware files, original iOS boot inputs and build-local inputs are described in [proprietary-files.txt](proprietary-files.txt).
 
-`package/selected071/` contains 95 exact source exports selected by the current
+`package/selected071/` contains 135 exact source exports selected by the current
 link plan, including the native XNU overlays, Sony radio and OLED owners, and
 userspace adapters. Its source manifest records hashes and effective component
 pins. These are the open-source inputs used by the local candidate. Proprietary
