@@ -1,0 +1,4 @@
+# D27/24A446 KPI backport after the selected shared Darwin 26/27 patch series.
+ios27-strict5-native-kpi.patch
+ios27-d27-sanitizer-state.patch
+ios27-sheng-stack-alignment.patch

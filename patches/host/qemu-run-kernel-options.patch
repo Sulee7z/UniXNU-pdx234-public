@@ -1,0 +1,11 @@
+diff --git a/qemu-run.py b/qemu-run.py
+--- a/qemu-run.py
++++ b/qemu-run.py
+@@ -121,2 +121,4 @@
+     parser.add_argument("--cpus", type=int, default=2, help="number of virtual CPUs (default: 2)")
+     parser.add_argument("--cpu", default="cortex-a72", help="QEMU CPU model/properties; use max,pauth=on for PAC observations")
++    parser.add_argument("--machine", default="virt", help="QEMU machine properties, including gic-version=3")
++    parser.add_argument("--memory-mib", type=int, choices=[512, 1024, 2048, 4096, 8192], default=1024)
+@@ -152 +154 @@
+-        qemu, "-M", "virt", "-cpu", args.cpu, "-m", "1024", "-smp", str(args.cpus),
++        qemu, "-M", args.machine, "-cpu", args.cpu, "-m", str(args.memory_mib), "-smp", str(args.cpus),

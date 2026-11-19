@@ -1,0 +1,22 @@
+# GPU-on first-frame isolation: keep core storage/security including Image4,
+# MobileGraphics, IOGPU and HID personalities. Omit optional scaler/DART/IOAV
+# roots; dependencies still retain their required library code.
+[ipsw]
+product = "iPhone14,7"
+device_class = "d27ap"
+build = "24A446"
+
+[kernel.prelink]
+kernelcache_sha256 = "c28f4fc9b83cde00087e81f890c82d566b9e98b5ac228dfecd83afdf34070445"
+roots = [
+  "com.apple.filesystems.apfs",
+  "com.apple.driver.AppleMobileFileIntegrity",
+  "com.apple.security.AppleImage4",
+  "com.apple.iokit.IOStorageFamily",
+  "com.apple.AppleFSCompression.AppleFSCompressionTypeZlib",
+  "com.apple.security.sandbox",
+  "com.apple.iokit.IOSurface",
+  "com.apple.iokit.IOMobileGraphicsFamily",
+  "com.apple.iokit.IOGPUFamily",
+  "com.apple.iokit.IOHIDFamily",
+]

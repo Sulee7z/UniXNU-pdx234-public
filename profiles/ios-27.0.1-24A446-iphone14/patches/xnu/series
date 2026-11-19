@@ -1,0 +1,5 @@
+# Same generic 27 compatibility layer as the official profile; no J820 address substitutions.
+arch:../../../patches/xnu-12377/zzz-boot-progress.patch
+arch:../../../patches/xnu-12377/darwin26-syscalls.patch
+arch:../../../patches/xnu-12377/darwin26-kpi.patch
+arch:../../../patches/xnu-12377/darwin26-shared-region.patch

@@ -1,0 +1,27 @@
+[Defines]
+  INF_VERSION = 0x00010019
+  BASE_NAME = ConfigFsProbe
+  FILE_GUID = 3C76A2D4-747D-468D-B722-1D99F51E8990
+  MODULE_TYPE = UEFI_APPLICATION
+  ENTRY_POINT = ConfigFsProbeEntry
+[Sources]
+  ConfigFsProbe.c
+[Packages]
+  MdePkg/MdePkg.dec
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DevicePathLib
+  FdtLib
+  HobLib
+  MemoryAllocationLib
+  UefiApplicationEntryPoint
+  UefiBootServicesTableLib
+  UefiLib
+[Guids]
+  gEfiHobListGuid
+  gEfiFileInfoGuid
+[Protocols]
+  gEfiDevicePathProtocolGuid
+  gEfiLoadedImageProtocolGuid
+  gEfiSimpleFileSystemProtocolGuid

@@ -1,0 +1,17 @@
+CONFIG_XNU_BUILD_ARCHIVES=y
+CONFIG_XNU_SOURCE_CORECRYPTO14=y
+CONFIG_XNU_SOURCE_PTHREAD=y
+CONFIG_XNU_ARMVIRT_PLATFORM=y
+CONFIG_XNU_ARMCPU=y
+CONFIG_XNU_CRYPTO_BOOTSTRAP="source"
+# Standalone MH_EXECUTE uses arm_init's legacy thread-start signer.
+# A separate fileset-prelink build must enable kernel chained fixups.
+# CONFIG_XNU_KERNEL_CHAINED_FIXUPS is not set
+CONFIG_XNU_NATIVE_ARCH_TIMER=y
+CONFIG_XNU_NATIVE_PAN=y
+CONFIG_XNU_DT_PANIC_REGION=y
+# Native virtual-platform kernel first. Storage/display link qualification follows.
+# CONFIG_XNU_ARM_DT_PLATFORM is not set
+# CONFIG_XNU_NATIVE_UFS is not set
+# CONFIG_XNU_NATIVE_LEGACY_DISPLAY is not set
+# CONFIG_XNU_NATIVE_ADRENO is not set

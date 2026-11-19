@@ -1,0 +1,18 @@
+Keep the existing single-cluster boot-node fallback valid for QoS parallelism.
+Do not relabel CPUs or remove null/empty-node/two-cluster separation checks.
+
+--- a/osfmk/kern/sched_clutch.c
++++ b/osfmk/kern/sched_clutch.c
+@@ -6696,8 +6696,10 @@ sched_edge_qos_max_parallelism(int qos, uint64_t options)
+-	if (pset_node_is_empty(low_node) || pset_node_is_empty(high_node)) {
++	/* A single-cluster boot deliberately uses the boot node for both roles. */
++	bool boot_node_fallback = pset_node_is_empty(low_node) || pset_node_is_empty(high_node);
++	if (boot_node_fallback) {
+ 		low_node = high_node = sched_boot_pset_node;
+ 	}
+ 	assert3p(low_node, !=, PSET_NODE_NULL);
+ 	assert3p(high_node, !=, PSET_NODE_NULL);
+-	if (sched_is_standard_topology()) {
++	if (sched_is_standard_topology() && !boot_node_fallback) {
+ 		assert3p(low_node, !=, high_node);
+ 	}

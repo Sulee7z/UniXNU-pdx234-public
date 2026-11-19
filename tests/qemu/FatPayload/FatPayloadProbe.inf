@@ -1,0 +1,28 @@
+[Defines]
+  INF_VERSION = 0x00010019
+  BASE_NAME = FatPayloadProbe
+  FILE_GUID = D6CD5496-17BA-4E9E-9DF4-E721569BD60C
+  MODULE_TYPE = UEFI_APPLICATION
+  ENTRY_POINT = FatPayloadProbeEntry
+[Sources]
+  FatPayloadProbe.c
+[Packages]
+  MdePkg/MdePkg.dec
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DevicePathLib
+  FdtLib
+  HobLib
+  MemoryAllocationLib
+  UefiApplicationEntryPoint
+  UefiBootServicesTableLib
+  UefiRuntimeServicesTableLib
+  UefiLib
+[Guids]
+  gEfiHobListGuid
+  gEfiFileInfoGuid
+[Protocols]
+  gEfiDevicePathProtocolGuid
+  gEfiLoadedImageProtocolGuid
+  gEfiSimpleFileSystemProtocolGuid

@@ -1,0 +1,13 @@
+[Defines]
+  INF_VERSION = 0x00010005
+  BASE_NAME = Pdx234MemoryMapLib
+  FILE_GUID = 38F5986B-2634-4487-9BD2-7B13C58B1820
+  MODULE_TYPE = BASE
+  VERSION_STRING = 1.0
+  LIBRARY_CLASS = MemoryMapLib
+[Sources]
+  MemoryMapLib.c
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdePkg/MdePkg.dec
+  SiliciumPkg/SiliciumPkg.dec

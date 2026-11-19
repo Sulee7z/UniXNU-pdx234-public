@@ -1,0 +1,36 @@
+name: Package preflight
+
+on: [workflow_dispatch]
+
+permissions:
+  contents: read
+
+jobs:
+  package-preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: device
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: UniXNU/UniXNU
+          ref: 563595abedfdfa413ad583b66b6176d82007e633
+          path: UniXNU
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/checkout@v4
+        with:
+          repository: UniXNU/UniXNU-sm8550-common
+          ref: a9f45dc60c035084b95463781538380f4c3606c9
+          path: UniXNU-sm8550-common
+          persist-credentials: false
+      - name: Validate the porting record and resolve the bootstrap configuration
+        run: |
+          diff -u UniXNU/templates/package.sh device/scripts/package.sh
+          python3 UniXNU/scripts/porting-record.py check --device device
+          cp -R device/profiles/ios-27.0.1-24A446-iphone14 UniXNU/profiles/os/
+          bash device/scripts/package.sh --check --no-deps --local-module "soc:sm8550=$PWD/UniXNU-sm8550-common"

@@ -1,0 +1,32 @@
+# Explicit graphics closure for the sheng27 source-driver integration.
+# IOHIDEventService code is in IOHIDFamily. IOHIDEventDriver has codeless
+# metadata in the original cache, not its own fileset executable. PDX065 runtime
+# confirms AppleUserHIDEventService and its user client already match.
+[ipsw]
+product = "iPhone14,7"
+device_class = "d27ap"
+build = "24A446"
+
+[kernel.prelink]
+kernelcache_sha256 = "c28f4fc9b83cde00087e81f890c82d566b9e98b5ac228dfecd83afdf34070445"
+roots = [
+  "com.apple.filesystems.apfs",
+  "com.apple.driver.AppleMobileFileIntegrity",
+  "com.apple.security.AppleImage4",
+  "com.apple.kext.CoreTrust",
+  "com.apple.kec.corecrypto",
+  "com.apple.iokit.IOStorageFamily",
+  "com.apple.AppleFSCompression.AppleFSCompressionTypeZlib",
+  "com.apple.security.sandbox",
+  "com.apple.kext.AppleMatch",
+  "com.apple.iokit.IOSurface",
+  "com.apple.iokit.IOMobileGraphicsFamily",
+  "com.apple.iokit.IOGPUFamily",
+  "com.apple.iokit.IOHIDFamily",
+  "com.apple.driver.AppleM2ScalerCSCDriver",
+  "com.apple.driver.IODARTFamily",
+  "com.apple.iokit.IOAVFamily",
+  "com.apple.iokit.IOCECFamily",
+  "com.apple.iokit.IOHDCPFamily",
+  "com.apple.kec.Libm",
+]

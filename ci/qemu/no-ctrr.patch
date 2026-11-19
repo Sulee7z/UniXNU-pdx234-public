@@ -1,0 +1,12 @@
+diff --git a/scripts/qemu-entry/make-dt.py b/scripts/qemu-entry/make-dt.py
+--- a/scripts/qemu-entry/make-dt.py
++++ b/scripts/qemu-entry/make-dt.py
+@@ -104,6 +104,8 @@
+                     *root_matching,
+                     *([('boot-manifest-hash', bytes([0xa5]) * 48)] if args.conflicting_boot_manifest else []),
+                     ('dram-base', struct.pack('<Q', 0x40000000)),
+                     ('dram-size', struct.pack('<Q', args.dram_size)),
++                    # QEMU virt has no Apple CTRR controller; XNU still requires this input.
++                    *([('kernel-ctrr-to-be-enabled', struct.pack('<I', 0))] if args.armvirt else []),
+                     *([('crypto-hash-method', args.crypto_hash_method.encode() + b'\0')] if args.crypto_hash_method else []),
+                     *([('amfi-only-platform-code', struct.pack('<I', 1))] if args.amfi_platform_only else []),

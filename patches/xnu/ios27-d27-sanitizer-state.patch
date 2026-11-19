@@ -1,0 +1,249 @@
+diff --git a/osfmk/kern/task.h b/osfmk/kern/task.h
+--- a/osfmk/kern/task.h
++++ b/osfmk/kern/task.h
+@@ -673,12 +673,15 @@
+ 
+ 	/* Runtime security mitigations */
+ 	task_security_config_s security_config;
++	/* D27 compatibility: occupies measured native alignment padding. */
++	uint8_t sanitizer_config;
+ 
+ #define CONFIG_LARGE_SIZE_TELEMETRY (!XNU_TARGET_OS_OSX)
+ #if CONFIG_LARGE_SIZE_TELEMETRY
+ 	/* Guard objects telemetry. */
+ 	_Atomic vm_map_size_t large_allocation_size;
+ #endif
++
+ };
+ 
+ ZONE_DECLARE_ID(ZONE_ID_PROC_TASK, void *);
+@@ -1235,6 +1238,25 @@
+ extern void machine_task_terminate(task_t task);
+ 
+ extern kern_return_t machine_task_process_signature(task_t task, uint32_t platform, uint32_t sdk, char const **error_msg);
++
++/*
++ * D27 compatibility identifiers, not recovered Apple enum spellings. Values
++ * are binary-derived: ASan OR 0x02, TSan OR 0x04, spawn input AND 0x0e.
++ * Bit 3 survives the D27 spawn mask; its semantic name is not established.
++ * These masks describe exec inputs, not a restriction on stored task state.
++ */
++#define D27_SANITIZER_ASAN       0x02
++#define D27_SANITIZER_TSAN       0x04
++#define D27_SANITIZER_SPAWN_MASK 0x0e
++
++/*
++ * Valid, non-null task required. Preserve the entire byte, including unknown
++ * bits. The setter is for serialized task construction / image activation,
++ * not concurrent runtime mutation. Exec input translation is handled by BSD.
++ * Getter/setter names are descriptive compatibility APIs.
++ */
++extern uint8_t task_get_sanitizer_config(task_t task);
++extern void task_set_sanitizer_config(task_t task, uint8_t config);
+ 
+ /*
+  * Each runtime security mitigation that we support for userland processes
+diff --git a/osfmk/kern/task.c b/osfmk/kern/task.c
+--- a/osfmk/kern/task.c
++++ b/osfmk/kern/task.c
+@@ -1486,6 +1486,7 @@
+ 	new_task->crashed_thread_id = 0;
+ 	new_task->watchports = NULL;
+ 	new_task->t_rr_ranges = NULL;
++	new_task->sanitizer_config = 0;
+ 
+ 	new_task->bank_context = NULL;
+ 
+@@ -1507,6 +1508,8 @@
+ 
+ 		/* task_security_config options are always inherited on fork */
+ 		new_task->security_config = parent_task->security_config;
++		/* Preserve the whole sanitizer byte only for memory-inheriting tasks. */
++		new_task->sanitizer_config = parent_task->sanitizer_config;
+ 	}
+ 
+ #ifdef MACH_BSD
+@@ -9937,6 +9940,21 @@
+ }
+ #endif
+ 
++/* D27 compatibility: separate raw task state, never Boolean-normalized. */
++uint8_t
++task_get_sanitizer_config(task_t task)
++{
++	assert(task);
++	return task->sanitizer_config;
++}
++
++void
++task_set_sanitizer_config(task_t task, uint8_t config)
++{
++	assert(task);
++	task->sanitizer_config = config;
++}
++
+ /* Task runtime security mitigations configuration. */
+ #define TASK_SECURITY_CONFIG_HELPER_DEFINE(suffix) \
+ 	bool task_has_##suffix(task_t task) \
+diff --git a/bsd/sys/spawn_internal.h b/bsd/sys/spawn_internal.h
+--- a/bsd/sys/spawn_internal.h
++++ b/bsd/sys/spawn_internal.h
+@@ -250,6 +250,8 @@
+ 	int             psa_dataless_iopolicy;   /* materialize dataless iopolicy parameter */
+ 	uint64_t        psa_crash_behavior_deadline; /* crash behavior deadline */
+ 	uint8_t         psa_launch_type;         /* type of launch for launch constraint enforcement */
++	/* D27 raw sanitizer input; uses the existing byte of alignment padding. */
++	uint8_t         psa_d27_sanitizer_options;
+ 	uint16_t        psa_sec_flags;           /* flags for task_sec */
+ 
+ 	/* For exponential backoff */
+diff --git a/bsd/sys/d27_spawn_wire.h b/bsd/sys/d27_spawn_wire.h
+new file mode 100644
+--- /dev/null
++++ b/bsd/sys/d27_spawn_wire.h
+@@ -0,0 +1,53 @@
++#ifndef _SYS_D27_SPAWN_WIRE_H_
++#define _SYS_D27_SPAWN_WIRE_H_
++
++/* D27/24A446 user ABI, independently recovered from the original library
++ * setters and kernel copyin. Not an offset overlay on native spawnattr.
++ * Include after spawn_internal.h, with memcpy/memset and errno available.
++ */
++struct d27_spawn_wire_prefix {
++	uint8_t common_through_launch_type[169];
++	uint8_t padding_before_policy[3];
++	uint32_t policy_raw;
++	uint8_t sanitizer_options;
++	uint8_t padding_after_sanitizer[3];
++	uint32_t crash_count;
++	uint32_t throttle_timeout;
++	uint32_t kqworkloop_soft_limit;
++	uint32_t kqworkloop_hard_limit;
++	uint32_t conclave_mem_limit;
++};
++_Static_assert(sizeof(struct d27_spawn_wire_prefix) == 200, "D27 copyin prefix");
++_Static_assert(offsetof(struct d27_spawn_wire_prefix, policy_raw) == 172, "D27 policy");
++_Static_assert(offsetof(struct d27_spawn_wire_prefix, sanitizer_options) == 176, "D27 sanitizer");
++_Static_assert(offsetof(struct _posix_spawnattr, psa_launch_type) == 168, "native launch type");
++_Static_assert(offsetof(struct _posix_spawnattr, psa_d27_sanitizer_options) == 169, "native padding byte");
++_Static_assert(offsetof(struct _posix_spawnattr, psa_sec_flags) == 170, "native security flags");
++_Static_assert(offsetof(struct _posix_spawnattr, psa_ports) == 192, "native extension boundary");
++
++static inline int
++d27_spawn_translate_prefix(const struct d27_spawn_wire_prefix *wire,
++    struct _posix_spawnattr *native)
++{
++	/* Original rejects all bits outside 0x1f01. The remaining nonzero values
++	 * require a separate semantic policy mapping; do not truncate them into
++	 * the older native sec_flags. This adapter currently supports policy=0.
++	 */
++	if (wire->policy_raw & ~UINT32_C(0x1f01)) {
++		return EINVAL;
++	}
++	if (wire->policy_raw != 0) {
++		return ENOTSUP;
++	}
++	memset(native, 0, sizeof(*native));
++	memcpy(native, wire->common_through_launch_type,
++	    sizeof(wire->common_through_launch_type));
++	native->psa_d27_sanitizer_options = wire->sanitizer_options;
++	native->psa_crash_count = wire->crash_count;
++	native->psa_throttle_timeout = wire->throttle_timeout;
++	native->psa_kqworkloop_soft_limit = wire->kqworkloop_soft_limit;
++	native->psa_kqworkloop_hard_limit = wire->kqworkloop_hard_limit;
++	native->psa_conclave_mem_limit = wire->conclave_mem_limit;
++	return 0;
++}
++#endif
+diff --git a/bsd/kern/kern_exec.c b/bsd/kern/kern_exec.c
+--- a/bsd/kern/kern_exec.c
++++ b/bsd/kern/kern_exec.c
+@@ -114,6 +114,7 @@
+ #include <sys/ubc_internal.h>           /* ubc_map() */
+ #include <sys/spawn.h>
+ #include <sys/spawn_internal.h>
++#include <sys/d27_spawn_wire.h>
+ #include <sys/process_policy.h>
+ #include <sys/codesign.h>
+ #include <sys/random.h>
+@@ -1845,6 +1846,23 @@
+ 		task_clear_ipc_containment_vessel(new_task);
+ 	}
+ 
++	/* Recompute the new image's sanitizer state; never reuse old entitlements.
++	 * IOVnodeHasEntitlement accepts exactly non-null/non-kOSBooleanFalse
++	 * objects and releases the copied entitlement using the existing API.
++	 */
++	const struct _posix_spawnattr *sanitizer_spawn = imgp->ip_px_sa;
++	uint8_t sanitizer_config = sanitizer_spawn ?
++	    sanitizer_spawn->psa_d27_sanitizer_options & D27_SANITIZER_SPAWN_MASK : 0;
++	if (IOVnodeHasEntitlement(imgp->ip_vp, (int64_t)imgp->ip_arch_offset,
++	    "com.apple.security.developer-tools.address-sanitizer")) {
++		sanitizer_config |= D27_SANITIZER_ASAN;
++	}
++	if (IOVnodeHasEntitlement(imgp->ip_vp, (int64_t)imgp->ip_arch_offset,
++	    "com.apple.security.developer-tools.thread-sanitizer")) {
++		sanitizer_config |= D27_SANITIZER_TSAN;
++	}
++	task_set_sanitizer_config(new_task, sanitizer_config);
++
+ 	/*
+ 	 * No-guard-objects disables guards for process deallocated allocations or VM.
+ 	 */
+@@ -4348,6 +4366,7 @@
+ 	struct vfs_context context;
+ 	struct user__posix_spawn_args_desc px_args = {};
+ 	struct _posix_spawnattr px_sa = {};
++	struct d27_spawn_wire_prefix d27_wire = {};
+ 	_posix_spawn_file_actions_t px_sfap = NULL;
+ 	_posix_spawn_port_actions_t px_spap = NULL;
+ 	struct __kern_sigaction vec;
+@@ -4358,7 +4377,6 @@
+ 	os_reason_t exec_failure_reason = NULL;
+ 
+ 	struct exec_port_actions port_actions = { };
+-	vm_size_t px_sa_offset = offsetof(struct _posix_spawnattr, psa_ports);
+ 	task_t old_task = current_task();
+ 	task_t new_task = NULL;
+ 	boolean_t should_release_proc_ref = FALSE;
+@@ -4452,7 +4470,13 @@
+ 			 * This is a bit fragile: <rdar://problem/16427422>
+ 			 */
+ 
+-			if ((error = copyin(px_args.attrp, &px_sa, px_sa_offset)) != 0) {
++			/* This kernel selects original D27 userland. Match its single
++			 * fixed 200-byte snapshot for any nonzero attr_size.
++			 */
++			if ((error = copyin(px_args.attrp, &d27_wire, sizeof(d27_wire))) != 0) {
++				goto bad;
++			}
++			if ((error = d27_spawn_translate_prefix(&d27_wire, &px_sa)) != 0) {
+ 				goto bad;
+ 			}
+ 
+@@ -7311,6 +7335,25 @@
+ 			goto bad;
+ 		}
+ 		imgp->ip_applec++;
++	}
++
++	/* D27 publishes sanitizer state only when at least one raw bit is set. */
++	{
++		uint8_t sanitizer_config = task_get_sanitizer_config(task);
++		if (sanitizer_config != 0) {
++			#define SANITIZER_CONFIG_KEY "sanitizer_config="
++			char sanitizer_config_str[strlen(SANITIZER_CONFIG_KEY) + HEX_STR_LEN + 1];
++
++			snprintf(sanitizer_config_str, sizeof(sanitizer_config_str),
++			    SANITIZER_CONFIG_KEY "0x%x", (unsigned int)sanitizer_config);
++
++			error = exec_add_user_string(imgp, CAST_USER_ADDR_T(sanitizer_config_str), UIO_SYSSPACE, FALSE);
++			if (error) {
++				printf("Failed to add the sanitizer config string with error %d\n", error);
++				goto bad;
++			}
++			imgp->ip_applec++;
++		}
+ 	}
+ 
+ 	/*

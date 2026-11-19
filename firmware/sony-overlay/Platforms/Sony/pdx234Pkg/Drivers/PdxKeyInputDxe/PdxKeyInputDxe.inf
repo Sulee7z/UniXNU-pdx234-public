@@ -1,0 +1,29 @@
+[Defines]
+  INF_VERSION = 0x00010019
+  BASE_NAME = PdxKeyInputDxe
+  FILE_GUID = B83D8BE0-FF86-4D40-95D5-EBA0F20B0612
+  MODULE_TYPE = DXE_DRIVER
+  VERSION_STRING = 0.1
+  ENTRY_POINT = PdxKeyInputEntry
+[Sources]
+  PdxKeyInput.c
+[Packages]
+  MdePkg/MdePkg.dec
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  UefiBootServicesTableLib
+  UefiRuntimeServicesTableLib
+  MemoryAllocationLib
+  UefiDriverEntryPoint
+  UefiLib
+  DevicePathLib
+[Protocols]
+  gEfiSimpleTextInProtocolGuid
+  gEfiDevicePathProtocolGuid
+[Guids]
+  gEfiEventExitBootServicesGuid
+  gEfiGlobalVariableGuid
+[Depex]
+  gEfiTimerArchProtocolGuid AND gEfiVariableArchProtocolGuid AND gEfiVariableWriteArchProtocolGuid

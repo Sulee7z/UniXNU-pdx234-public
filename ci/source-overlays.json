@@ -1,0 +1,98 @@
+{
+  "unixnu_revision": "5dc00d201496a1e7a72d1f5db23f041eb94ace1c",
+  "prelink_revision": "9b950f2e104da77f494e8f2735c6f044f0e4db4d",
+  "component_files": [
+    {
+      "path": "emit_prelink.py",
+      "sha256_lf": "5d3a40fdbe98a5ce27ff36352a11b022ce2fa400696cee34a97be4e16e6f461c"
+    },
+    {
+      "path": "fileset_emit.py",
+      "sha256_lf": "2cd450a3542e5ce83596144e2ec2446b52eb02d20cd19b9a23f1918c35777265"
+    },
+    {
+      "path": "fileset_layout.py",
+      "sha256_lf": "2e576952356f0a10374518b561e9cab69be78dff27b72e27a59c14532ebd27ff"
+    },
+    {
+      "path": "fileset_match.py",
+      "sha256_lf": "404fb8b3ffd307cb6624d6ad3a23931e51f8a77dda011f10abfc9f86d3bb6ddb"
+    },
+    {
+      "path": "fileset_segmented.py",
+      "sha256_lf": "0f8d5275bd92918de15b33fc94d3464e4de0990f2adfc571024255928f17b755"
+    },
+    {
+      "path": "fileset_shape.py",
+      "sha256_lf": "d256a5714846268554493de069f53b896d3d17e3afcd0ec343fb938734832ca1"
+    },
+    {
+      "path": "fixtures/fileset-23F84-symbols.json",
+      "sha256_lf": "63ebc5b6e549baf22898a070b7c2f9ebe8aa27505cd5effd9facf2c77f9ef644"
+    },
+    {
+      "path": "fixtures/fileset-24A446-d27-symbols.json",
+      "sha256_lf": "bd7113f72435ea6a64323bdc734205877c6422ab4ee7ee03fd894624caba2ed6"
+    },
+    {
+      "path": "fixtures/fileset-24A446-symbols.json",
+      "sha256_lf": "026fb497af4d9bc3afc28b6a22be3210ba52ae0c4b5193ce9b34a4b72792b5d8"
+    },
+    {
+      "path": "kc_image.py",
+      "sha256_lf": "2a2561308b27ace4e21dd4e45924bdeca937ee13047b7c6fd5ce580018f68747"
+    },
+    {
+      "path": "LICENSE",
+      "sha256_lf": "5b1d3d911103cb0f41641ec0964c5ac1f7e229f57aa072b6ac38bae913a1307b"
+    },
+    {
+      "path": "native_prelink.py",
+      "sha256_lf": "5bd80b8c63deec29b747c28253e02308a56d5f8cdb37c9d315e7c8af7012d017"
+    },
+    {
+      "path": "README.md",
+      "sha256_lf": "6fc10a0a38c8cf04186900e2e9c23b23122714fbdae712328657bbb59c54432f"
+    },
+    {
+      "path": "test_codeless.py",
+      "sha256_lf": "2c4ac17ceadc75de993490e970dedb4179b5231445f30f10c1c742fe2cf0680a"
+    },
+    {
+      "path": "test_emit_prelink.py",
+      "sha256_lf": "69b40226cb263a744ec9be9e684f61d83885fed9badeec40bdbd18f5bbe34aea"
+    },
+    {
+      "path": "test_fileset_emit.py",
+      "sha256_lf": "f79d53be06c32b5bfd5740526c6bffe5fdfee790d5ffbcbe37d2d263502c1ff8"
+    },
+    {
+      "path": "test_fileset_layout.py",
+      "sha256_lf": "cff2de8ee8a83d2a027cc4c152268f85d2746951e2fb906255a09fd994fcfdde"
+    },
+    {
+      "path": "test_fileset_match.py",
+      "sha256_lf": "ee0b9cebfb4767d904fb8c0b583c14afe968c9f53e12220b46685b648d371f8b"
+    },
+    {
+      "path": "test_fileset_shape.py",
+      "sha256_lf": "a73ff889796dcf3e51e8f4a7cd1c69c2d94b5b3dca3266d4f1b2d66dda55b925"
+    },
+    {
+      "path": "test_native_prelink.py",
+      "sha256_lf": "c9aba30c6790604ed77a1a1cd368f11ea04d67d8ad7820f102e98ec711d508be"
+    }
+  ],
+  "arch_patch": {
+    "path": "arch/native-metaclass-vptr-poison.patch",
+    "sha256_lf": "0bf7babf7ec817ec90ae85594e491add31af810c22ff2ae7acd18f30a1d567ee"
+  },
+  "mainline_patches": [
+    {
+      "path": "qemu/no-ctrr.patch",
+      "sha256_lf": "626669bbdabc892a985c0e7419c46fa46fb922894d38ffae7aaa56a02f4a63c0"
+    }
+  ],
+  "only_source_files": true,
+  "proprietary_inputs_included": false
+}

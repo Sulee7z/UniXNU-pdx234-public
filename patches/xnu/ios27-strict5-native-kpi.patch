@@ -1,0 +1,173 @@
+Subject: D27/24A446 native V2 KPI bindings for the no-monitor port
+
+Image4 V2 exports explicitly report unavailable monitor operations, rather
+than fabricating policy or nonce updates. The guard refuses monitor builds.
+The DriverKit API uses generated IORPC dispatch with the original message ID;
+the kernel implementation only calls the registered dictionary handler.
+
+diff --git a/config/IOKit.exports b/config/IOKit.exports
+--- a/config/IOKit.exports
++++ b/config/IOKit.exports
+@@ -191,6 +191,7 @@
+ __ZN9IOService21RemoveProperty_InvokeE5IORPCP15OSMetaClassBasePFiS2_P8OSStringE
+ 
+ __ZN9IOService25StateNotificationItemCopyEP8OSStringPP12OSDictionaryPFiP15OSMetaClassBase5IORPCE
++__ZN9IOService20CallPlatformFunctionEP8OSStringbP12OSDictionaryPS3_PFiP15OSMetaClassBase5IORPCE
+ __ZN9IOService24StateNotificationItemSetEP8OSStringP12OSDictionaryPFiP15OSMetaClassBase5IORPCE
+ __ZN9IOService27StateNotificationItemCreateEP8OSStringP12OSDictionaryPFiP15OSMetaClassBase5IORPCE
+ __ZN9IOService12GetBusyStateEPjPFiP15OSMetaClassBase5IORPCE
+diff --git a/config/Private.exports b/config/Private.exports
+--- a/config/Private.exports
++++ b/config/Private.exports
+@@ -907,6 +907,10 @@
+ _unrestrict_local_signing_cdhash
+ _unrestrict_local_signing_cdhash_ext
+ _kernel_image4_monitor_trap
++_image4_v2_set_nonce_digest
++_image4_v2_roll_nonce
++_image4_v2_load_diavlo_root_ca
++_image4_v2_load_local_policy
+ _kernel_image4_storage_data
+ _kernel_image4_set_nonce
+ _kernel_image4_roll_nonce
+diff --git a/iokit/DriverKit/IOService.iig b/iokit/DriverKit/IOService.iig
+--- a/iokit/DriverKit/IOService.iig
++++ b/iokit/DriverKit/IOService.iig
+@@ -566,6 +566,11 @@
+ 	virtual kern_return_t
+ 	StateNotificationItemCopy(OSString * itemName, OSDictionary ** value);
+ 
++	/* D27/24A446 IORPC 0xbf66f4287c60ef85; not the raw platform API. */
++	virtual kern_return_t
++	CallPlatformFunction(OSString * functionName, bool waitForFunction,
++	    OSDictionary * input, OSDictionary ** output);
++
+    /*!
+     * @function CreatePMAssertion
+     * @abstract Create a power management assertion.
+diff --git a/iokit/Kernel/IOUserServer.cpp b/iokit/Kernel/IOUserServer.cpp
+--- a/iokit/Kernel/IOUserServer.cpp
++++ b/iokit/Kernel/IOUserServer.cpp
+@@ -7750,6 +7750,56 @@
+ 	return ret;
+ }
+ 
++/* The handler returned by IOUserPlatformFunction uses dictionary arguments. */
++typedef IOReturn (*IOUserPlatformFunctionHandler)(IOService *, const OSSymbol *,
++    bool, OSDictionary *, OSDictionary **);
++
++kern_return_t
++IOService::CallPlatformFunction_Impl(OSString * functionName, bool waitForFunction,
++    OSDictionary * input, OSDictionary ** output)
++{
++	if (!functionName || !output) {
++		return kIOReturnBadArgument;
++	}
++	*output = NULL;
++	task_t task = current_task();
++	if (!task || !task_is_driver(task)) {
++		return kIOReturnUnsupported;
++	}
++	if (reserved && reserved->uvars && reserved->uvars->userServer &&
++	    reserved->uvars->userServer->fOwningTask != task) {
++		return CallPlatformFunction(functionName, waitForFunction, input, output, NULL);
++	}
++
++	const OSSymbol * query = OSSymbol::withCStringNoCopy("IOUserPlatformFunction");
++	if (!query) {
++		return kIOReturnNoMemory;
++	}
++	IOUserPlatformFunctionHandler handler = NULL;
++	IOReturn ret = callPlatformFunction(query, true, &handler, NULL, NULL, NULL);
++	query->release();
++	if (ret != kIOReturnSuccess || !handler) {
++		return kIOReturnUnsupported;
++	}
++	/* A raw six-argument platform method is not an authorized V2 handler. */
++	typedef IOReturn (IOService::*RawMethod)(const OSSymbol *, bool,
++	    void *, void *, void *, void *);
++	IOUserPlatformFunctionHandler raw = OSMemberFunctionCast(IOUserPlatformFunctionHandler,
++	    this, static_cast<RawMethod>(&IOService::callPlatformFunction));
++	if (handler == raw) {
++		IOLog("callPlatformFunction disallowed for user platform function: service %s, 0x%llx\n",
++		    getName(), getRegistryEntryID());
++		return kIOReturnUnsupported;
++	}
++	const OSSymbol * name = OSSymbol::withString(functionName);
++	if (!name) {
++		return kIOReturnNoMemory;
++	}
++	ret = handler(this, name, waitForFunction, input, output);
++	name->release();
++	return ret;
++}
++
+ kern_return_t
+ IOService::stateNotificationListenerAdd(OSArray * items,
+     IOStateNotificationListenerRef * outRef,
+diff --git a/libkern/image4/image4_v2.c b/libkern/image4/image4_v2.c
+--- a/libkern/image4/image4_v2.c
++++ b/libkern/image4/image4_v2.c
+@@ -6,6 +6,20 @@
+  */
+ #include <libkern/libkern.h>
+ #include <libkern/section_keywords.h>
++#include <mach/mach_types.h>
++#include <sys/code_signing_internal.h>
++#include <sys/errno.h>
++
++#if CODE_SIGNING_MONITOR
++#error "Image4 V2 native compatibility requires the no-monitor configuration"
++#endif
++
++/* These exports report an absent monitor, never a successful policy update. */
++errno_t image4_v2_set_nonce_digest(uint32_t domain, const void *digest, size_t length);
++errno_t image4_v2_roll_nonce(uint32_t domain);
++errno_t image4_v2_load_diavlo_root_ca(const void *payload, size_t payload_length,
++    const void *manifest, size_t manifest_length);
++errno_t image4_v2_load_local_policy(const void *policy, size_t length);
+ 
+ void image4_v2_interface_register(const void *interface);
+ 
+@@ -21,3 +35,41 @@
+ 	}
+ 	_image4_v2_interface = interface;
+ }
++
++errno_t
++image4_v2_set_nonce_digest(uint32_t domain, const void *digest, size_t length)
++{
++	(void)digest;
++	printf("image4_v2: nonce digest registration has no monitor: %u | %lu\n",
++	    domain, length);
++	return ENOTSUP;
++}
++
++errno_t
++image4_v2_roll_nonce(uint32_t domain)
++{
++	printf("image4_v2: monitor nonce roll unavailable: %u\n", domain);
++	return ENOTSUP;
++}
++
++errno_t
++image4_v2_load_diavlo_root_ca(const void *payload, size_t payload_length,
++    const void *manifest, size_t manifest_length)
++{
++	/* Preserve the D27 V2 caller's validation result; it is not BSD EINVAL. */
++	if (!payload || !payload_length || !manifest || !manifest_length) {
++		return 3;
++	}
++	printf("image4_v2: Diavlo Root CA loading has no monitor\n");
++	return ENOTSUP;
++}
++
++errno_t
++image4_v2_load_local_policy(const void *policy, size_t length)
++{
++	if (!policy || !length) {
++		return 3;
++	}
++	printf("image4_v2: local policy loading has no monitor\n");
++	return ENOTSUP;
++}

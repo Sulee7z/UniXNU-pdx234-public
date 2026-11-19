@@ -1,0 +1,9 @@
+[Defines]
+  DEC_SPECIFICATION = 0x00010005
+  PACKAGE_NAME = Pdx234Payload
+  PACKAGE_GUID = E32A1F08-B213-4A0D-BC4D-B90577D04E6C
+  PACKAGE_VERSION = 0.1
+
+[Guids]
+  # File GUID of the unmodified shared UniXNURamDiskDxe.
+  gPdxSharedRamDiskFileGuid = {0x75CA63AD,0xFBAE,0x4A06,{0x92,0xA0,0xF9,0x37,0xC6,0x71,0x25,0x1D}}

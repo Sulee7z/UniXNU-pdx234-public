@@ -1,0 +1,15 @@
+diff --git a/libkern/c++/OSMetaClass.cpp b/libkern/c++/OSMetaClass.cpp
+--- a/libkern/c++/OSMetaClass.cpp
++++ b/libkern/c++/OSMetaClass.cpp
+@@ -366,8 +366,9 @@
+ OSMetaClassBase::~OSMetaClassBase()
+ {
+-	void ** thisVTable;
++	/* Keep the explicit vtable poison after lifetime-based store elimination. */
++	void *volatile *thisVTable;
+ 
+-	thisVTable = (void **) this;
++	thisVTable = (void *volatile *) this;
+ 	*thisVTable = (void *) -1UL;
+ }
+ 

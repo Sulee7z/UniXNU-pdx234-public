@@ -1,0 +1,53 @@
+schema_version = 2
+# Historical minimal bootstrap selection. Active D27 handset candidates use
+# the qualified scripts/ci route documented at the top of README.md; this file
+# does not describe their eight-core/storage/graphics/payload selection.
+
+[board]
+name = "pdx234"
+soc = "SM8550"
+soc_source = "sm8550"
+# Official Sheng SM8550/27 architecture route with separately verified iPhone14 inputs.
+os_profile = "ios-27.0.1-24A446-iphone14"
+kit = "pdx234"
+description = "Sony XQ-DQ72 / PDX-234: Android-preserving UEFI candidate, menu/root deployment not yet qualified"
+
+[components]
+include = ["ArmDTPlatform", "ArmCpu", "SoftwareAES", "XnuPrelink", "DarwinBoot"]
+
+[kernel]
+defconfig = "pdx234_native27_probe_defconfig"
+config_fragments = ["arch:configs/common.config", "os:configs/ios.config"]
+patch_series = ["arch:patches/xnu/series", "soc:patches/xnu-12377/series", "os:patches/xnu/series", "device:patches/xnu/series"]
+archives = ["prepare-xnu-source.py", "build-corecrypto-14.py", "build-corecrypto-14.py --namespace", "component:ArmDTPlatform", "component:ArmCpu", "component:SoftwareAES", "build-libpthread-kernel.py", "build-fileset-release-reference.py --tree . --lto"]
+
+[device_tree]
+source = "device:dts/pdx234.dts"
+include_dirs = ["soc:dts"]
+
+[payload]
+volume = "PDX234XNU"
+size_mib = 64
+loader = "firmware"
+title = "Xperia bootstrap: local draft only"
+kernel_args = ["-v", "serial=3", "cpus=1", "debug=0x14e", "kt_fixed_zones=120", "-no_slto_panic", "use_contiguous_hint=0", "native-ufs-root=0", "sheng-data-persist=0"]
+
+[payload.adt]
+root_match_volume_uuid = "CA0FF65B-3E73-4D62-9000-EC719E1B6DB1"
+
+[adt.defaults.u32]
+sleep-disabled = 1
+vmm-present = 1
+
+[package]
+unixnu = "../UniXNU"
+boot_partition_bytes = 100663296
+
+[package.defconfig]
+"ipados-17.7.11-21H461" = "pdx234_bootstrap_defconfig"
+"ios-27.0.1-24A446-iphone14" = "pdx234_native27_probe_defconfig"
+
+# No firmware/FD addresses, root UUID or userdata ranges are guessed here.
+# The template example marker is cleared so the documented kernel stage runs.
+# Remaining gates are the disabled iOS payload entry, absent firmware/bootimg
+# inputs and the QEMU SpringBoard delivery gate, not the example flag.

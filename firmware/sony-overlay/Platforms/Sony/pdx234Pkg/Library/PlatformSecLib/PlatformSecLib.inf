@@ -1,0 +1,14 @@
+[Defines]
+  INF_VERSION = 0x00010005
+  BASE_NAME = Pdx234PlatformSecLib
+  FILE_GUID = 10E67638-097A-4C52-BA0A-93DB777C6779
+  MODULE_TYPE = BASE
+  VERSION_STRING = 1.0
+  LIBRARY_CLASS = PlatformSecLib
+[Sources]
+  PlatformSec.c
+  PlatformAssembly.S
+[Packages]
+  MdePkg/MdePkg.dec
+  ArmPkg/ArmPkg.dec
+  SiliciumPkg/SiliciumPkg.dec

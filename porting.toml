@@ -1,0 +1,189 @@
+schema_version = 1
+
+[device]
+name = "pdx234"
+soc = "SM8550"
+os_profile = "ios-27.0.1-24A446-iphone14"
+summary = "Sony Xperia 1 V (XQ-DQ72), SM8550, D27 arm64e port. PDX071 is the current local candidate."
+
+[[area]]
+id = "configuration"
+status = "implemented"
+components = ["ArmDTPlatform", "ArmCpu", "SoftwareAES", "XnuPrelink", "DarwinBoot"]
+paths = ["board.toml"]
+inputs = ["UniXNU 5dc00d201496a1e7a72d1f5db23f041eb94ace1c; Sheng main 689400177f93219a38bd7cf5ae2e9f5782adc594; selected SM8550 a9f45dc60c035084b95463781538380f4c3606c9; original iPhone14 D27/24A446 inputs"]
+configuration = ["Clear the leftover template example marker so the documented kernel stage runs; use the iPhone14 input profile with the official arm64e/XNU12377 27 compatibility layer and disable unqualified peripherals.", "D27 device patch series includes ios27-d27-sanitizer-state.patch. Native task size/member offsets and native spawn layout are preserved; translate the original D27 200-byte spawn prefix and recompute typed sanitizer state. Nonzero task-security-policy remains explicitly unsupported rather than truncated."]
+procedure = ["Resolve shared source pins and run the official porting-record checker before any build."]
+findings = ["New reviewed mainline status resolves arm64e, SM8550 and the original iPhone14 input profile; the package path and exact root UUID are selected without copying Sheng's iPad identity.", "Generic documented boot arguments and native CLI slide=0 are explicit. Three Sony-input checks pass. Shared SoC resources stay separate from Sony memory/peripheral ownership; kernel-arg write guards and disabled-hardware guards remain, and the example marker is now absent.", "Action run 42463576375 reached the kernel step and stopped only on that leftover example marker; no firmware/bootimg input was invented and the resolver still rejects real example repositories.", "Manual macOS Actions kernel comparison checks the exact Sheng68940017 integration reference, retains audited mainline5dc00d20, verifies source-only XnuPrelink/architecture overlays, and appends the required RELEASE-LTO reference builder after its archive dependencies. The scope is kernel/prelink and redacted logs only; no Sheng firmware/seed/board resources or images are adopted."]
+completion = ["Source pins resolve and board config/patch order match the intended target."]
+limits = ["The iOS payload entry stays disabled. Strict sanitizer/Sandbox prelink now passes with no unresolved imports, but strict-candidate runtime and display remain unqualified. Task-security-policy zero is supported; invalid bits return EINVAL and other nonzero values return ENOTSUP until their semantics are mapped."]
+next_action = ["Follow the current sheng27 driver and dependency route pinned at 00ba90984e831e4c6ce30ec3d8a56e6434e9f1af; see docs/SHENG27-DRIVER-ROUTE-20261110.md. Preserve Sony board inputs and D27/24A446 identity/ABI. Packaging now preserves board vmm-present=1; original AMFI positive/negative branches pass with only the ADT changed. No GitHub Actions or device operations are authorized by this update."]
+evidence = [{kind = "source", reference = "board.toml", result = "Selected implementation or sanitized comparison record."}]
+
+[[area]]
+id = "firmware"
+status = "implemented"
+components = []
+paths = ["firmware/sony-overlay/Platforms/Sony/pdx234Pkg/pdx234.dsc"]
+inputs = ["Captured active boot/init_boot/vendor_boot/DTBO and live FDT; Sony uefiplat.cfg; Mu_Basecore cfb93724a06ff86ff5ba971413368a7809ee42a5"]
+configuration = ["Sony-owned memory/SEC/board policy, 3MiB FD at 0xa7100000; static iOS-menu config FS. Android runs before UEFI, not through a menu entry. Shared CapsuleRuntimeDxe uses the inherited DSC/library mappings."]
+procedure = ["Follow official UEFI integration and debugging guides. Build firmware with a new attempt label, inspect the actual FD architecture providers and preserve every Android input before packing."]
+findings = ["Earlier firmware service repairs, direct Android and volume-up selection remain.", "The user explicitly requested a local dual-kernel entry-probe image without a SpringBoard prerequisite; device operations remain read-only.", "Replaced the incomplete CPIO ConfigFS experiment with standard FAT transport: the actual Sony LZMA adapter, unmodified shared RAM-disk and firmware FAT read the exact XNU bytes in AAVMF. New fat013 FD passes service checks; actual DEPEX orders the adapter before shared ramdisk. DarwinBoot compilation includes the Sony real-bank allocation bounds."]
+completion = ["Sony UEFI enters the menu and both Android and XNU handoffs are separately verified."]
+limits = ["Handset XNU entry, Sony PAC/IRQ and SpringBoard remain unqualified. The old-FD layout fixture is not a delivery image; dual-kernel-candidate-001 is an entry-test candidate only."]
+next_action = ["Candidate001 device photo confirms green post-ExitBootServices handoff but has no XNU entry probes. Candidate002 installs official blue/pre-MMU-magenta probes with no reset and POST reseal. Record next Sony entry observation before changing cache/MMU or storage drivers; see evidence/sony-green-handoff-entry-diag-20261110.json."]
+evidence = [{kind = "source", reference = "firmware/sony-overlay/Platforms/Sony/pdx234Pkg/pdx234.dsc", result = "Selected implementation or sanitized comparison record."}]
+
+[[area]]
+id = "cpu"
+status = "implemented"
+components = []
+paths = ["dts/pdx234.dts"]
+inputs = ["Live FDT CPU affinity 0..0x700, GIC 0x17100000/0x17180000 and PSCI SMC"]
+configuration = ["Qualified CI release064 has eight EEEPPPPP CPU nodes, smp=1 and sheng-smp=1; draft board.toml remains an early single-core experiment. Actual ArmCpu timer/SGI counters are32bit."]
+procedure = ["Use selected XNU cpu_data/processor headers; record each core running/state/step/fail/PSCI and timer/IPI deltas every10s. Validate absent/starting/idle/running cases locally, then collect actual handset records."]
+findings = ["Actual persistent PDX065 log, hash-bound to the delivered image and phoneboot_a, reports all8 cores present/running, states4/6, secondary step7/fail0/PSCI0 and running/schedulableff. Everycore timer/IPI counter advances across samples. This replaces prior unverified CPU status; aggregate non-atomic secondary count is not the sole proof."]
+completion = ["Every selected CPU passes native entry/timer/IRQ and required PAC checks."]
+limits = ["Online/activity evidence is for065; not proof allcores alwaysbusy or066 runtime. Cross-core reads are asynchronous, not a simultaneous atomic snapshot; suspend remains separate."]
+next_action = ["Retain065 per-core runtime proof and compare new066 samples if available; prioritize measured touch boot-status failure."]
+evidence = [{kind = "source", reference = "dts/pdx234.dts", result = "Selected implementation or sanitized comparison record."}]
+
+[[area]]
+id = "memory"
+status = "implemented"
+components = []
+paths = ["scripts/ci/build-d27-high-memory-firmware.py"]
+inputs = ["Live FDT multiple low/high RAM regions and board-owned reserved-memory areas"]
+configuration = ["Board DTS now records all seven nonzero captured low/high RAM regions and the splash; UEFI reservation/DMA qualification is still independent."]
+procedure = ["Match all reserved areas and physical-address width against the actual UEFI map."]
+findings = ["Compiled Sony DTS matches every nonzero captured /memory/reg range; copying Sheng's contiguous 2GiB is avoided. Existing firmware reservations are not replaced by RAM availability claims."]
+completion = ["Firmware reservations and every DMA range are accounted for."]
+limits = ["Complete memory-map translation and DMA ownership are not verified."]
+next_action = ["Complete the Sony memory handoff before building a bootable image."]
+evidence = [{kind = "source", reference = "scripts/ci/build-d27-high-memory-firmware.py", result = "Selected implementation or sanitized comparison record."}]
+
+[[area]]
+id = "storage"
+status = "implemented"
+components = []
+paths = ["scripts/ci/build-sheng27-sony-source-storage.py"]
+inputs = ["Read-only GPT with matching primary/backup CRCs; UFS host 0x1d84000/0x3000; PHY 0x1d80000/0x1934"]
+configuration = ["Actual unixnu slot98 spans45679360..62456575 in4096-byte LBAs,64GiB. Original D27 readonly OS/SystemOS windows and SHNGROOT manifest are installed and fully hash-verified. Firmware/native UFS root selection and persistent writes remain disabled in the draft."]
+procedure = ["Follow official UFS and dual-system guides; do not run partition apply on this layout.", "User requested a new interim handset diagnostic package. Strict native links real ArmCpu SPI masking, retains readonly assertions and heap-allocates UFS scratch. Validate virtual block reads, panic text, exact FAT transport and Android selector before local delivery; agent device operations remain read-only.", "Handset001 reached HC inspection and stopped at SMMU planning. Consolidated002 fixes proven Mach-O asm truncation, adds exact firmware-SID reroute preserving former/shared contexts, and runs one capacity/GPT/identity/repeated-read check. Nine sanitizer suites, ten actual diagnostic fault cases, QEMU read/display and final FAT/selector checks pass; new Sony read result remains unobserved. See evidence/sony-ufs-test-candidate-002.json."]
+findings = ["Historical Android layout had no unixnu and rddata after userdata. Authorized Sony adaptation now creates64GiB unixnu before unchanged rddata using count128/slot98. Both live GPT copies and kernel views verified.", "Original D27 OS/SystemOS inputs are installed inside unixnu with both full readback hashes verified; all30 RAM-staged chunks pass. QEMU uses populated seeded Data, but Sony runtime root/Data integration remains separate and unqualified.", "SHNGROOT committed only after both complete images matched. Final independent check confirms unchanged GPT, metadata/rddata complete-device hashes and unixnu alias. No iOS boot success follows from this recovery-side installation."]
+completion = ["Android-preserving layout verified; known-block reads, root mount and Data persistence pass on Sony."]
+limits = ["Handset004 passed XNU read-only LUN0 known-GPT-block access. New repartitioning and installed image hashes were verified through recovery/Linux, not XNU root mounting. All-LUN I/O, XNU backup GPT, owner-authenticated root mount and persistent Data remain unverified. Android encrypted initialization and rebooted GPT acceptance pending; no boot/system/metadata/rddata partition writes."]
+next_action = ["Preserve handset004 and installed-system002 evidence. Do not rerun partitioning or image installation. Continue Sony unixnu-only owner-authenticated root/Data integration with iOS boot entry and persistent writes disabled until independently qualified."]
+evidence = [{kind = "source", reference = "scripts/ci/build-sheng27-sony-source-storage.py", result = "Selected implementation or sanitized comparison record."}]
+
+[[area]]
+id = "display"
+status = "implemented"
+components = []
+paths = ["drivers/SonyOledBacklight/platform069/Native069.cpp"]
+inputs = ["Sony panel/DSI and splash from live FDT"]
+configuration = ["Physical Sony GOP and qualified D27 display ABI active in the CI route.064 sets banner=0 and boot-diag-resume=0 after UI handoff; file logs and panic display retained."]
+procedure = ["Inspect the user's hash-bound PDX063 photo and actual BootProgress handoff paths; execute real handoff/refresh/overlay functions with a host framebuffer counter."]
+findings = ["063 photograph proves visible iOS welcome UI at303s and diagnostic coverage. Ordinary overlay draws pixels only; resume10 can independently clear/reclaim a static UI.064 host simulation writes no post-handoff pixels through4000s with both controls disabled, while oldresume10 reproduces takeover."]
+completion = ["Sony GOP and native frame presentation verified."]
+limits = ["Device evidence covers visible063 presentation, not unlocked Home Screen, brightness/suspend or064 clean handoff on hardware."]
+next_action = ["Observe064 welcome UI without diagnostic coverage and test the physical swipe gesture."]
+evidence = [{kind = "source", reference = "drivers/SonyOledBacklight/platform069/Native069.cpp", result = "Selected implementation or sanitized comparison record."}]
+
+[[area]]
+id = "input"
+status = "implemented"
+components = []
+paths = ["drivers/SonyLxsTouch/SonyTouch.cpp"]
+inputs = ["Read-only live Android lxs_ts_input SW82907 I2C2-0028/a90000/400kHz, GPIO44/45 reset24 IRQ25, inclusive1644x3840 and10contacts; hash-bound Sony vendor module and kalama GCC/pinctrl reference; qualified D27 HID input002."]
+configuration = ["066 retainsSony SW82907 I2C400kHz/FIFOorSE_DMA,GPIO25 polling,SIDa3/appsSMMU15000000,063BlockABI,064UI/CPU and065DMA/HIDretry. Newvendorbootpolicy treats0/allones/busy asSKIP but validateschip10/protocol4 andpost-startDEVICE_CTL/codeCRC/running before scanning. Full19roots unchanged; no fictitious event-driver executable root."]
+procedure = ["Read input guide, collect permitted DT/sysfs/logs, extract vendor sources, implement wire/status/contact/HID contracts and bounded GENI transport, test actual C sources under ASan/UBSan, compile D27 HID ABI and strictly prelink isolated development kernel."]
+findings = ["ActualPDX065 persistentlog provesstage3/error-33 aftercorrectchip37363031/productS2X65234/boot0/DMAerr0/SMMU7,69 andbefore scanwrites. Our065done-bit check contradictsSonyBOOT_CHK_SKIP semantics.066 vendorpolicy andnewversion/postscanchecks pass exact065negativecontrol and165538cases againstverbatimSonyfunctions. Actual065alreadyhasAppleUserHIDEventService+userclient/usage13,4; missingeventdriverhypothesis withdrawn because originalrow iscodeless. SonyDT/GCC/pinctrl values separately rechecked againstshengSPI/matrix/drive differences."]
+completion = ["Cold-boot engine initialization, actual Sony touch reports, multi-contact IDs, release, portrait orientation/edge gestures and swipe unlock verified on iOS hardware."]
+limits = ["Actual065 SE_DMAsmallregister reads/HIDservice matching areproven;132byterep frames/UIgesture/unlock remainunverified.066effectsneeduserhardwaretest. Underlyingreasonforboot0 unknown; usevendorsemanticswithindependentscangates, not fabricateddonebits. NoPower/suspendqualification."]
+next_action = ["Usermanual066test; readpersistentioslogfirstafterreturntoAndroid. Check[sony-touch-boot]/sensor/drive thenframes/HIDreports; do not replace measurediosfailurewithAndroidgeteventidle windows."]
+evidence = [{kind = "source", reference = "drivers/SonyLxsTouch/SonyTouch.cpp", result = "Selected implementation or sanitized comparison record."}]
+
+[[area]]
+id = "gpu"
+status = "implemented"
+components = []
+paths = ["scripts/ci/build-d27-gpu-source.py"]
+inputs = ["SM8550 and reported Adreno740v2, GPU/GMU and SMMU resources"]
+configuration = ["Qualified CI route keeps Sony Adreno/Metal enabled, signed addon/trust, CDC-off and dpu-scanout=0.064 retains063 GPU implementation and runtime addon."]
+procedure = ["Reuse reviewed Adreno740/AdrenoMetal/Sm8550Platform fixes, not sheng-specific votes or ZAP."]
+findings = ["063photoGPUoffers867/done866failed0fb0; actualPDX065 persistentlognowshows completedfence8f9->1166andcopy/retire433->840. Shippedclientreports successafterMetal completedstatus. GPUCsubs72issamplecount,notallwork. Runtimeprogressobserved, notallframecomposition."]
+completion = ["Sony init, submission, retirement and pixels verified."]
+limits = ["065 GPUexecutionandpresentationprogressdonotproveallframecomposition, stabilityunderallworkloadsor066runtime. Touchfailureisindependentstage3/-33."]
+next_action = ["Retainmeasured065fence/presentation evidenceandfocuson066sensorstart; comparefurtherGPUlogswithoutdisablingknownworkingGPUconfiguration."]
+evidence = [{kind = "source", reference = "scripts/ci/build-d27-gpu-source.py", result = "Selected implementation or sanitized comparison record."}]
+
+[[area]]
+id = "network"
+status = "implemented"
+components = []
+paths = ["ci/platform069/peripherals071.py"]
+inputs = ["Sony GIC-600 ITS at 0x17140000 and redistributor frame at 0x17180000; current live runtime ownership state is not available in this host-only check."]
+configuration = ["No Wi-Fi/Bluetooth startup is claimed. A source-level guard checks GITS_BASER.Valid and the complete encoded address field [47:12] before reprogramming an inactive table."]
+procedure = ["Run the focused SonyIts.c owner helper regression with ASan/UBSan. Before selecting the provider, compile the current C/C++ ITS objects for arm64e, verify actual register ownership/layout inputs, then run complete radio/Board2/ITS host regressions and linked checks."]
+findings = ["The previous preflight owner mask omitted bits [15:12], which are part of GITS_BASER address encoding for a 64 KiB page. The previous 0x0000ffffffff0000 mask missed stale addresses in those bits. The current helper uses Valid bit 63 plus address bits [47:12], 0x8000fffffffff000; readback masks and register programming were not changed.", "The actual current SonyIts.c helper passed per-bit zero/Device/Collection and former-mask negative-control tests under ASan/UBSan. This is a host helper test only, not production MMIO initialization."]
+completion = ["Sony join/traffic and Bluetooth behavior verified."]
+limits = ["The newer radio-provider069-its-init-001 is linked into the PDX069 manual-test candidate. Board2/parser and ITS control flow passed host checks only. Actual GITS_TYPER/BASER and per-redistributor CommonLPIAff runtime state, ITS initialization, scan/association and Bluetooth pairing remain unverified."]
+next_action = ["Record actual PDX069 radio startup, interrupts and association/pairing on the handset separately from linked and modeled results. See the d27-platform069-candidate area for current host evidence."]
+evidence = [{kind = "source", reference = "ci/platform069/peripherals071.py", result = "Selected implementation or sanitized comparison record."}]
+
+[[area]]
+id = "audio"
+status = "planned"
+components = []
+paths = ["README.md"]
+inputs = ["Sony codec/amplifier/ADSP paths"]
+configuration = ["No sheng audio board policy enabled."]
+procedure = ["Follow DSP/power guide with Sony firmware and codec inputs."]
+findings = ["Same SoC audio blocks do not establish amplifier/codec compatibility."]
+completion = ["Sony playback and capture verified."]
+limits = ["Not yet implemented."]
+next_action = ["Inventory board-owned audio components."]
+evidence = []
+
+[[area]]
+id = "power"
+status = "implemented"
+components = []
+paths = ["drivers/SonyWcn/platform069/SonySharedResources.cpp"]
+inputs = ["Sony PMIC/rail/reset and boot firmware ownership"]
+configuration = ["Do not copy sheng regulators and charger policy."]
+procedure = ["Bind measured Sony supplies and shared PMIC interfaces."]
+findings = ["Keep Android and vendor firmware baseline untouched."]
+completion = ["Board power operations and reset behavior verified."]
+limits = ["No native board power writes are authorized."]
+next_action = ["Collect read-only power ownership evidence."]
+evidence = [{kind = "source", reference = "drivers/SonyWcn/platform069/SonySharedResources.cpp", result = "Selected implementation or sanitized comparison record."}]
+
+[[area]]
+id = "packaging"
+status = "implemented"
+components = []
+paths = ["scripts/ci/package-sony-platform069.py"]
+inputs = ["96MiB boot/vendor_boot and 8MiB init_boot partitions, Android v4 metadata"]
+configuration = ["Keep Android kernel byte-identical and original ramdisk/DTBO dependencies external to Git."]
+procedure = ["Inspect exact container offsets and AVB; verify all repacked members before deployment."]
+findings = ["The published PDX071 record identifies the sealed image and host checks."]
+completion = ["A dual-menu package passes byte-identity, memory/size/AVB and both boot-path checks."]
+limits = ["Canonical release remains under integration. See README.md for the local Sony transport and 999-byte packaging limit."]
+next_action = ["Integrate and verify the Sony payload transport with a fresh resolver build."]
+evidence = [{kind = "source", reference = "scripts/ci/package-sony-platform069.py", result = "Selected implementation or sanitized comparison record."}]
+
+[[area]]
+id = "diagnostics"
+status = "implemented"
+components = []
+paths = ["evidence/d27-platform070-handset-readback.json"]
+inputs = ["Read-only ADB root access and captured FDT/boot/GPT metadata"]
+configuration = ["No device write, reboot or RAM boot in current authorization."]
+procedure = ["Record source pins, hashes and exact hardware milestones independently."]
+findings = ["PDX070 reached persistent log storage. Peripheral stages are summarized in the readback record."]
+completion = ["Every claimed capability has matching source/host/device evidence."]
+limits = ["PDX071 hardware testing is pending."]
+next_action = ["Capture the PDX071 Wi-Fi DMA, Bluetooth discovery, and OLED resource rows."]
+evidence = [{kind = "source", reference = "evidence/d27-platform070-handset-readback.json", result = "Selected implementation or sanitized comparison record."}]

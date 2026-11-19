@@ -1,0 +1,32 @@
+[Defines]
+  INF_VERSION = 0x00010019
+  BASE_NAME = PdxConfigFsDxe
+  FILE_GUID = 52FB2778-A24C-4431-A312-F83C18FB0D6D
+  MODULE_TYPE = DXE_DRIVER
+  VERSION_STRING = 0.1
+  ENTRY_POINT = PdxConfigFsEntry
+[Sources]
+  PdxConfigFs.c
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  pdx234Pkg/Pdx234Payload.dec
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  MemoryAllocationLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+  FdtLib
+  HobLib
+  DxeServicesTableLib
+[Protocols]
+  gEfiSimpleFileSystemProtocolGuid
+  gEfiDevicePathProtocolGuid
+[Guids]
+  gEfiFileInfoGuid
+  gEfiFileSystemInfoGuid
+[Depex]
+  BEFORE gPdxSharedRamDiskFileGuid

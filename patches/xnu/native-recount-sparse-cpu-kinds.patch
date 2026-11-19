@@ -1,0 +1,18 @@
+Keep allocation spans valid for sparse fixed CPU-kind indexes (including E-only bring-up).
+Normal P-only, P+E and non-AMP behavior is unchanged. Do not relabel hardware or disable zero checks.
+
+--- a/osfmk/kern/recount.c
++++ b/osfmk/kern/recount.c
+@@ -160,7 +160,11 @@
+ 	for (unsigned int i = 0; i < cpu_count; i++) {
+ 		cpu_kind_bits |= 1 << _topo_cpu_kinds[i];
+ 	}
+-	_recount_cpu_kind_count = __builtin_popcount(cpu_kind_bits);
++	/* Tracks are indexed by the fixed RCT_CPU_* values.  A boot with only
++	 * E cores still uses index 1; popcount would allocate just index 0.
++	 * Reserve through the highest present index, leaving holes zeroed. */
++	_recount_cpu_kind_count = cpu_kind_bits ?
++	    (unsigned int)(sizeof(cpu_kind_bits) * 8 - __builtin_clz(cpu_kind_bits)) : 0;
+ 	assertf(_recount_cpu_kind_count <= RECOUNT_CPU_KIND_COUNT,
+ 	    "detected number of CPU kinds (%u) greater-than expected (%u), from bits 0x%x",
+ 	    _recount_cpu_kind_count, RECOUNT_CPU_KIND_COUNT, cpu_kind_bits);

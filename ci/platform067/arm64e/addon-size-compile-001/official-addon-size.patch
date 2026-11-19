@@ -1,0 +1,14 @@
+--- a/bsd/kern/kern_exec.c
+
++++ b/bsd/kern/kern_exec.c
+
+@@ -8401,6 +8401,8 @@
+
+ 		struct vnode_attr va;
+ 		VATTR_INIT(&va);
+ 		VATTR_SET(&va, va_mode, mode);
++		/* Kernel vnode_open does not finish O_TRUNC on the non-compound path. */
++		VATTR_SET(&va, va_data_size, size);
+ 		error = vnode_setattr(vp, &va, ctx);
+ 	}
+ 	if (!error) {

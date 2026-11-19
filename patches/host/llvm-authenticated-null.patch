@@ -1,0 +1,130 @@
+diff --git a/clang/include/clang/Basic/Attr.td b/clang/include/clang/Basic/Attr.td
+--- a/clang/include/clang/Basic/Attr.td
++++ b/clang/include/clang/Basic/Attr.td
+@@ -3839 +3839,2 @@
+-              IntArgument<"ExtraDiscriminator", 1>];
++              IntArgument<"ExtraDiscriminator", 1>,
++              StringArgument<"Options", 1>];
+diff --git a/clang/include/clang/Basic/DiagnosticParseKinds.td b/clang/include/clang/Basic/DiagnosticParseKinds.td
+--- a/clang/include/clang/Basic/DiagnosticParseKinds.td
++++ b/clang/include/clang/Basic/DiagnosticParseKinds.td
+@@ -1630 +1630 @@
+-  "'__ptrauth' qualifier must take between 1 and 3 arguments">;
++  "'__ptrauth' qualifier must take between 1 and 4 arguments">;
+diff --git a/clang/include/clang/Basic/DiagnosticSemaKinds.td b/clang/include/clang/Basic/DiagnosticSemaKinds.td
+--- a/clang/include/clang/Basic/DiagnosticSemaKinds.td
++++ b/clang/include/clang/Basic/DiagnosticSemaKinds.td
+@@ -1051,0 +1052,3 @@
++def err_ptrauth_auth_null_option : Error<
++  "unsupported '__ptrauth' options: expected the ordinary string literal "
++  "'authenticates-null-values'">;
+diff --git a/clang/lib/AST/TypePrinter.cpp b/clang/lib/AST/TypePrinter.cpp
+--- a/clang/lib/AST/TypePrinter.cpp
++++ b/clang/lib/AST/TypePrinter.cpp
+@@ -2680 +2680,4 @@
+-     << getExtraDiscriminator() << ")";
++     << getExtraDiscriminator();
++  if (authenticatesNullValues())
++    OS << ",\"authenticates-null-values\"";
++  OS << ")";
+diff --git a/clang/lib/CodeGen/CGExprConstant.cpp b/clang/lib/CodeGen/CGExprConstant.cpp
+--- a/clang/lib/CodeGen/CGExprConstant.cpp
++++ b/clang/lib/CodeGen/CGExprConstant.cpp
+@@ -1312,0 +1313,5 @@
++      // Let APValue emission apply this schema once at the final storage site.
++      // Visiting nested casts here would create discarded address placeholders.
++      if (PointerAuthQualifier Qual = destType.getPointerAuth();
++          Qual && Qual.authenticatesNullValues())
++        return nullptr;
+@@ -1532,0 +1538,3 @@
++    if (PointerAuthQualifier Qual = T.getPointerAuth();
++        Qual && Qual.authenticatesNullValues())
++      return nullptr;
+@@ -2263 +2271,5 @@
+-    return CGM.getNullPointer(destPtrTy, DestType);
++    llvm::Constant *Null = CGM.getNullPointer(destPtrTy, DestType);
++    if (PointerAuthQualifier Qual = DestType.getPointerAuth();
++        Qual && Qual.authenticatesNullValues())
++      return Emitter.tryEmitConstantSignedPointer(Null, Qual);
++    return Null;
+diff --git a/clang/lib/CodeGen/CGPointerAuth.cpp b/clang/lib/CodeGen/CGPointerAuth.cpp
+--- a/clang/lib/CodeGen/CGPointerAuth.cpp
++++ b/clang/lib/CodeGen/CGPointerAuth.cpp
+@@ -373 +373,4 @@
+-  if (Value == Null)
++  bool HasSignedNull =
++      (CurAuthInfo && CurAuthInfo.authenticatesNullValues()) ||
++      (NewAuthInfo && NewAuthInfo.authenticatesNullValues());
++  if (Value == Null && !HasSignedNull)
+@@ -387,0 +391,37 @@
++  if (HasSignedNull) {
++    // A signed-null policy cannot use the legacy raw-zero shortcut. Convert
++    // through the raw value, applying each policy's null rule independently.
++    // This also handles transfers between ordinary nullable and signed-null
++    // storage, including address-discriminated structure copies.
++    auto Transform = [&](llvm::Value *Input, const CGPointerAuthInfo &Info,
++                         bool Sign) -> llvm::Value * {
++      auto Emit = [&](llvm::Value *Pointer) {
++        return Sign ? EmitPointerAuthSign(Info, Pointer)
++                    : EmitPointerAuthAuth(Info, Pointer);
++      };
++      if (Info.authenticatesNullValues() ||
++          llvm::isKnownNonZero(Input, CGM.getDataLayout()))
++        return Emit(Input);
++      if (Input == Null)
++        return Input;
++
++      llvm::BasicBlock *InitBB = Builder.GetInsertBlock();
++      llvm::BasicBlock *NonNullBB = createBasicBlock("ptrauth.nonnull");
++      llvm::BasicBlock *ContBB = createBasicBlock("ptrauth.cont");
++      Builder.CreateCondBr(Builder.CreateICmpNE(Input, Null), NonNullBB, ContBB);
++      EmitBlock(NonNullBB);
++      llvm::Value *Converted = Emit(Input);
++      llvm::BasicBlock *ConvertedBB = Builder.GetInsertBlock();
++      EmitBlock(ContBB);
++      auto *Phi = Builder.CreatePHI(Input->getType(), 2);
++      Phi->addIncoming(Null, InitBB);
++      Phi->addIncoming(Converted, ConvertedBB);
++      return Phi;
++    };
++    if (CurAuthInfo)
++      Value = Transform(Value, CurAuthInfo, /*Sign=*/false);
++    if (NewAuthInfo)
++      Value = Transform(Value, NewAuthInfo, /*Sign=*/true);
++    return Value;
++  }
++
+diff --git a/clang/lib/Parse/ParseDecl.cpp b/clang/lib/Parse/ParseDecl.cpp
+--- a/clang/lib/Parse/ParseDecl.cpp
++++ b/clang/lib/Parse/ParseDecl.cpp
+@@ -3203 +3203 @@
+-  if (ArgExprs.empty() || ArgExprs.size() > 3) {
++  if (ArgExprs.empty() || ArgExprs.size() > 4) {
+diff --git a/clang/lib/Sema/SemaType.cpp b/clang/lib/Sema/SemaType.cpp
+--- a/clang/lib/Sema/SemaType.cpp
++++ b/clang/lib/Sema/SemaType.cpp
+@@ -8662,2 +8662,2 @@
+-  assert((Attr.getNumArgs() > 0 && Attr.getNumArgs() <= 3) &&
+-         "__ptrauth qualifier takes between 1 and 3 arguments");
++  assert((Attr.getNumArgs() > 0 && Attr.getNumArgs() <= 4) &&
++         "__ptrauth qualifier takes between 1 and 4 arguments");
+@@ -8669,0 +8670,16 @@
++  bool AuthenticatesNullValues = false;
++  if (Attr.getNumArgs() == 4) {
++    Expr *OptionsExpr = Attr.getArgAsExpr(3)->IgnoreParenImpCasts();
++    const auto *Options = dyn_cast<StringLiteral>(OptionsExpr);
++    // The XNU ABI needs this option. Reject unimplemented modes instead of
++    // accepting their spelling while silently retaining another signing policy.
++    if (!Options || !Options->isOrdinary() ||
++        Options->getString() != "authenticates-null-values") {
++      S.Diag(OptionsExpr->getExprLoc(), diag::err_ptrauth_auth_null_option)
++          << OptionsExpr->getSourceRange();
++      Attr.setInvalid();
++      return;
++    }
++    AuthenticatesNullValues = true;
++  }
++
+@@ -8713 +8729 @@
+-      /*AuthenticatesNullValues=*/false);
++      AuthenticatesNullValues);

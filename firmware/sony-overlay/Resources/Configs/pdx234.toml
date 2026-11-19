@@ -1,0 +1,14 @@
+[boot_shim]
+requires_kernel_header = true
+[uefi_fd]
+base = 0xA7100000
+size = 0x300000
+[boot_image_kernel]
+kernel_compression = "gzip"
+append_dtb = true
+[boot_image]
+header_version = 4
+base = 0
+kernel_offset = 0x8000
+tags_offset = 0x100
+pagesize = 4096

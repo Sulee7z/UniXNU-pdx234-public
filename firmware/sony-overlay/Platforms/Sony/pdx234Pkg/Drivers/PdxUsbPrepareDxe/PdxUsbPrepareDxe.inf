@@ -1,0 +1,32 @@
+[Defines]
+  INF_VERSION = 0x00010005
+  BASE_NAME = PdxUsbPrepareDxe
+  FILE_GUID = 9EB02581-63FC-44EE-A820-49CED6493F12
+  MODULE_TYPE = DXE_DRIVER
+  VERSION_STRING = 1.0
+  ENTRY_POINT = PdxUsbPrepareEntry
+[Sources]
+  PdxUsbPrepare.c
+  PdxUsbCdc.c
+  PdxUsbBoundary.c
+[Packages]
+  MdePkg/MdePkg.dec
+  QcomPkg/QcomPkg.dec
+  pdx234Pkg/Pdx234Usb.dec
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  UefiLib
+  DebugLib
+  MemoryAllocationLib
+  BaseMemoryLib
+  IoLib
+[Protocols]
+  gEfiUsbFunctionIoProtocolGuid
+  gPdxQcomUsbConfigProtocolGuid
+  gEfiUsbDeviceProtocolGuid
+[Guids]
+  gEfiEventReadyToBootGuid
+  gEfiEventExitBootServicesGuid
+[Depex]
+  gPdxQcomUsbConfigProtocolGuid AND gEfiUsbDeviceProtocolGuid

@@ -1,0 +1,48 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// Draft native hardware tree: facts from captured Xperia live.dtb, not sheng RAM geometry.
+/dts-v1/;
+/include/ "sm8550.dtsi"
+
+/ {
+    model = "Sony Corporation. PDX-234(Kalama QRD)";
+    compatible = "somc,pdx234-generic", "qcom,sm8550";
+
+    // Nonzero regions of the captured Sony /memory/reg, including high physical RAM.
+    // UEFI owns the corresponding reservation map; not Sheng's contiguous 2GiB.
+    memory@80000000 {
+        device_type = "memory";
+        reg = <0 0x80000000 0 0x00e00000>,
+              <0 0x811d0000 0 0x56e30000>,
+              <0 0xd8140000 0 0x00020000>,
+              <0 0xe1bb0000 0 0x1e450000>,
+              <8 0x80000000 0 0x39d00000>,
+              <8 0xc0000000 0 0xc0000000>,
+              <9 0x80000000 1 0x80000000>;
+    };
+
+    reserved-memory {
+        #address-cells = <2>;
+        #size-cells = <2>;
+        ranges;
+        splash_region: framebuffer@b8000000 {
+            label = "cont_splash_region";
+            reg = <0 0xb8000000 0 0x2b00000>;
+            no-map;
+        };
+    };
+};
+
+// Single boot CPU until actual secondary/PAC/IRQ bring-up. Shared affinities remain unchanged.
+&cpu0 { unixnu,cluster-type = "E"; };
+&cpu1 { unixnu,cluster-type = "E"; status = "disabled"; };
+&cpu2 { unixnu,cluster-type = "E"; status = "disabled"; };
+&cpu3 { unixnu,cluster-type = "P"; status = "disabled"; };
+&cpu4 { unixnu,cluster-type = "P"; status = "disabled"; };
+&cpu5 { unixnu,cluster-type = "P"; status = "disabled"; };
+&cpu6 { unixnu,cluster-type = "P"; status = "disabled"; };
+&cpu7 { unixnu,cluster-type = "P"; status = "disabled"; };
+&ufs { status = "disabled"; };
+&ufsphy { status = "disabled"; };
+&gpu { status = "disabled"; };
+&gmu { status = "disabled"; };
+&gpu_smmu { status = "disabled"; };

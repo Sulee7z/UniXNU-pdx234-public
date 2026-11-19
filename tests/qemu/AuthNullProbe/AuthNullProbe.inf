@@ -1,0 +1,21 @@
+[Defines]
+  INF_VERSION = 0x00010019
+  BASE_NAME = AuthNullProbe
+  FILE_GUID = 8CD9428E-9579-43E4-A947-02A972EA91D6
+  MODULE_TYPE = UEFI_APPLICATION
+  ENTRY_POINT = AuthNullProbeEntry
+[Sources]
+  AuthNullProbe.c
+  Blob.S
+[Packages]
+  MdePkg/MdePkg.dec
+[LibraryClasses]
+  BaseLib
+  PrintLib
+  UefiApplicationEntryPoint
+  UefiBootServicesTableLib
+  UefiLib
+[Protocols]
+  gEfiSerialIoProtocolGuid
+[BuildOptions]
+  *_*_AARCH64_CC_FLAGS = -march=armv8.3-a

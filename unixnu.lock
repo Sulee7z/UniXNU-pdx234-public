@@ -1,0 +1,4 @@
+# Resolved git sources, written by "unixnu fetch". Local sources are never recorded.
+
+[source."sm8550"]
+commit = "a9f45dc60c035084b95463781538380f4c3606c9"

@@ -1,0 +1,13 @@
+[Defines]
+  INF_VERSION = 0x00010005
+  BASE_NAME = Pdx234ConfigurationMapLib
+  FILE_GUID = 9A3BA429-FEA2-4C62-A45A-1C4F7048E4FD
+  MODULE_TYPE = BASE
+  VERSION_STRING = 1.0
+  LIBRARY_CLASS = ConfigurationMapLib
+[Sources]
+  ConfigurationMapLib.c
+[Packages]
+  MdePkg/MdePkg.dec
+  SiliciumPkg/SiliciumPkg.dec
+  QcomPkg/QcomPkg.dec

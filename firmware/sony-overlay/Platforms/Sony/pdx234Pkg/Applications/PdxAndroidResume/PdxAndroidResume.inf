@@ -1,0 +1,25 @@
+[Defines]
+  INF_VERSION = 0x00010019
+  BASE_NAME = PdxAndroidResume
+  FILE_GUID = 61F1E287-32B4-4DCF-9212-53A3ED86F73D
+  MODULE_TYPE = UEFI_APPLICATION
+  VERSION_STRING = 0.1
+  ENTRY_POINT = PdxAndroidResumeEntry
+[Sources]
+  AndroidResume.c
+  AndroidEntry.S
+[Packages]
+  MdePkg/MdePkg.dec
+  ArmPkg/ArmPkg.dec
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  ArmLib
+  CacheMaintenanceLib
+  HobLib
+  DxeServicesTableLib
+  MemoryAllocationLib
+  UefiApplicationEntryPoint
+  UefiBootServicesTableLib
+  UefiLib

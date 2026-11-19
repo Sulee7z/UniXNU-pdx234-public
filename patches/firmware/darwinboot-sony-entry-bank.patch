@@ -1,0 +1,20 @@
+diff --git a/DarwinBootPkg/Driver/DarwinBoot.c b/DarwinBootPkg/Driver/DarwinBoot.c
+--- a/DarwinBootPkg/Driver/DarwinBoot.c
++++ b/DarwinBootPkg/Driver/DarwinBoot.c
+@@ -524,6 +524,16 @@ AllocateWindow (KERNEL *Kernel, UINT64 WindowSize, EFI_PHYSICAL_ADDRESS *Address)
+     RunBytes = End - Descriptor->PhysicalStart;
+     if (RunBytes > BestBytes) { BestBytes = RunBytes; BestStart = Descriptor->PhysicalStart; }
+     Candidate = ALIGN_VALUE (Descriptor->PhysicalStart, BLOCK_SIZE) + (Kernel->Base & (BLOCK_SIZE - 1));
++#if defined(PDX234_ENTRY_DRAM_BASE) && defined(PDX234_ENTRY_DRAM_BYTES)
++    // Sony entry-test ADT exposes exactly this captured DRAM bank. Never allocate
++    // a kernel below gDramBase or across a gap in the sparse physical layout.
++    if (Candidate < PDX234_ENTRY_DRAM_BASE) {
++      Candidate = ALIGN_VALUE (PDX234_ENTRY_DRAM_BASE, BLOCK_SIZE) + (Kernel->Base & (BLOCK_SIZE - 1));
++    }
++    if (End > PDX234_ENTRY_DRAM_BASE + PDX234_ENTRY_DRAM_BYTES) {
++      End = PDX234_ENTRY_DRAM_BASE + PDX234_ENTRY_DRAM_BYTES;
++    }
++#endif
+     if ((Candidate < Descriptor->PhysicalStart) || (End < Candidate) || (End - Candidate < WindowSize)) { continue; }
+     Status = gBS->AllocatePages (AllocateAddress, EfiLoaderCode, EFI_SIZE_TO_PAGES (WindowSize), &Candidate);
+     if (!EFI_ERROR (Status)) { *Address = Candidate; break; }

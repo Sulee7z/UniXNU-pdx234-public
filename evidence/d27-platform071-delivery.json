@@ -1,0 +1,33 @@
+{
+  "model": "Sony Xperia XQ-DQ72 (PDX234)",
+  "build_tag": "PDX071",
+  "comparison": "evidence/d27-platform070-handset-readback.json",
+  "bytes": 98455552,
+  "sha256": "56d09a18ddf1217c44664a2de754840c780a73f9fd8b2ad5b0e20b2d2637dd64",
+  "boot_partition_headroom_bytes": 2207744,
+  "native_sha256": "371931b2120935e3e8b5a28424302f46c1fdaa01a777a74982546aaa564d7b14",
+  "strict_sha256": "bbe64f8104c3e5720bbfec0d08bd6fd2eb3926b5393997926bde56682765e306",
+  "sealed_sha256": "89430f9a52c68f6953cb9806489d9045771b08aad6c548b86dcfff94da9a4a58",
+  "readback": {
+    "linux": true,
+    "windows": true,
+    "separate_windows_sha256_matches": true,
+    "strict_missing": 0,
+    "strict_stubbed": 0,
+    "argument_bytes_per_menu_entry": 1016
+  },
+  "unchanged_from_070": [
+    "Android",
+    "firmware FD",
+    "ADT",
+    "verified-root payload",
+    "runtime addon",
+    "trustcache",
+    "both Data seeds"
+  ],
+  "scope": "Wi-Fi SMMU capability-versus-mode correction, bounded Sony GDSC readiness polling, and persistent peripheral records. Bluetooth scan behavior was not changed.",
+  "handset_boot_verified": false,
+  "hardware_features_verified": false,
+  "device_operations_for_build": false,
+  "qemu_run_for_this_candidate": false
+}

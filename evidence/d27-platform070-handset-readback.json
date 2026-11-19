@@ -1,0 +1,52 @@
+{
+  "model": "Sony Xperia XQ-DQ72 (PDX234)",
+  "boot_tag": "PDX070",
+  "boot_id_hex": "3e7145b8",
+  "boot_a_prefix_bytes": 98463744,
+  "boot_a_prefix_and_delivered_image_sha256": "69cf03184323a84252f5d6178b956b35710f00b2b2b805dd2e4b3d6d2edd95f6",
+  "log_window_bytes": 33554432,
+  "log_window_sha256": "07e4511ae2bcfc9329d380fb9d6b8781515c8e9de90e42952626247a898e61a8",
+  "phone_hashes_before_and_after_match": true,
+  "header": {
+    "uptime_s": 395,
+    "slots_written": 198,
+    "write_errors": 0
+  },
+  "wifi": {
+    "stage": -45,
+    "mhi_step": 0,
+    "supplicant_distinct_exit_pids": 54,
+    "errno_candidate": "ENOTSUP",
+    "exact_substep_observed": false
+  },
+  "bluetooth": {
+    "state": 2,
+    "error": 0,
+    "power_step": 7,
+    "active_scan_hci_available": false
+  },
+  "oled": {
+    "library_mount_stage": 5,
+    "executables_mount_stage": 5,
+    "mount_errors": 0,
+    "owner_stage": -4,
+    "error": -207,
+    "resource_error": -201,
+    "packets_sent": 0
+  },
+  "android": {
+    "fdt_sha256": "5cc7af1b1eec5642578deb3dea4722d8a02ddb61f600505b70ed8c457f13b06f",
+    "wifi_endpoint": "17cb:1107",
+    "wifi_link": "5.0 GT/s x1",
+    "panel_brightness_max": 4095,
+    "panel_brightness_actual_attribute_is_not_dbv_readback": true
+  },
+  "references": [
+    "https://unixnu.com/zh/porting/log-capture",
+    "https://unixnu.com/zh/porting/network",
+    "https://unixnu.com/zh/porting/bluetooth",
+    "https://unixnu.com/zh/porting/display"
+  ],
+  "limits": "Android readings are comparison inputs, not XNU handoff register readings. No active Bluetooth scan behavior or DSI brightness response was established.",
+  "device_access": "Android read-only; no reboot, write, or RAM boot"
+}

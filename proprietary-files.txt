@@ -1,0 +1,16 @@
+# Local build inputs for Sony PDX234, iPhone14,7 iOS 27.0.1 (24A446).
+# Sources and hashes of IPSW members and decompressed OS volumes are in
+# profiles/ios-27.0.1-24A446-iphone14/profile.toml.
+
+Apple kernelcache, decompressed SHA-256 c28f4fc9b83cde00087e81f890c82d566b9e98b5ac228dfecd83afdf34070445
+Apple DeviceTree.d27ap.im4p, original OS/SystemOS/App trust, and runtime binaries from the selected IPSW
+Sony Android boot input and matching init_boot, vendor_boot and DTBO from the target handset
+Sony firmware platform, DSC Platforms/Sony/pdx234Pkg/pdx234.dsc, plus the Sony variant firmware modules
+Sony official GENI I2C UART microcode, WCN7850 Kiwi AMSS/M3, Sony board data and regulatory file, QCA HMT firmware and ROM/BID-selected NVM
+Sony live device tree, panel and regulator inputs, retained locally for board verification
+Local Data seed and verified-root policy inputs, bound to the matching OS/SystemOS volumes
+Platform seed supplied through UNIXNU_UNIQUE_CHIP_ID or local build configuration
+
+# The PDX071 local build consumes a previously verified combined image as a
+# firmware/Android/payload template. Its retained firmware SHA-256 is
+# 30777cf8cafcb51e09d48a7ec5437575fcae816fe41575dfed6ede1734abe3ea.

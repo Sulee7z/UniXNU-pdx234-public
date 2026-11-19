@@ -1,0 +1,18 @@
+# Source and evidence metadata only. Partition dumps and extracted firmware stay external.
+/.cache/
+/out/
+/build/
+/local.toml
+/unixnu.local.toml
+__pycache__/
+*.pyc
+*.img
+*.dtb
+*.fd
+*.efi
+*.bin
+*.vhdx
+*.pem
+*.tar*
+*.bz2
+*.zip
