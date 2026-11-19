@@ -31,3 +31,19 @@ Public CI validates the exact selected-source hashes and the tests that use
 public inputs. Two integration suites report their missing private IPSW and
 handset fixtures as skipped. They execute with all assertions in the local
 handoff environment. CI does not claim a hardware result or a full image build.
+
+## Incremental handoff correction
+
+The original delivery-003 restore test started from an already linked native
+kernel. It missed six inputs supplied directly to the native linker, outside
+the filelist and force-loaded archives: `version.o`, `lastkerneldataconst.o`,
+`lastkernelconstructor.last.o`, `nonlto.o`, `libfirehose_kernel.a`, and
+`libcorecrypto_kernel_noasm-namespaced.a`. The inherited baseline also needs its
+own `recount.o` for complete input coverage.
+
+`ci/link_inputs.py` now enumerates both the filelist and all direct linker inputs.
+The exporter rejects an incomplete closure. The private incremental supplement
+adds the seven original files and a separate `rebuild-incremental.sh` entry point.
+`scripts/ci/rebuild-sony-platform071.py` recompiles all four follow-up objects,
+replaces their archive members, links a new native, and runs strict prelink and
+image validation. These binary inputs stay in the private handoff, outside Git.

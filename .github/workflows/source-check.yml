@@ -37,3 +37,5 @@ jobs:
         env:
           PDX071_TEST_CORE: ${{ github.workspace }}/upstream
         run: python3 -B -m unittest discover -s tests -p '*069.py'
+      - name: Check complete native linker input enumeration
+        run: python3 -B -m unittest discover -s tests -p 'test_link_inputs.py'
