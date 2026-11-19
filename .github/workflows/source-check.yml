@@ -12,6 +12,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: UniXNU/UniXNU
+          ref: 563595abedfdfa413ad583b66b6176d82007e633
+          path: upstream
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -28,4 +34,6 @@ jobs:
           print('Verified', len(record['source_files']), 'selected files')
           PY
       - name: Run platform host tests
+        env:
+          PDX071_TEST_CORE: ${{ github.workspace }}/upstream
         run: python3 -B -m unittest discover -s tests -p '*069.py'

@@ -28,6 +28,8 @@ RADIO = ARTIFACTS / "radio-userland069-002"
 PREVIOUS = ARTIFACTS / "launchd-cache069-003"
 
 
+@unittest.skipUnless((ORIGINAL / "System/Library/xpc/launchd.plist").is_file(),
+                     "Requires the private original D27 launchd cache and signing-stage fixtures")
 class LaunchdCacheTransformTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

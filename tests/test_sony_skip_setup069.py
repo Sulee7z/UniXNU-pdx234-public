@@ -1,11 +1,12 @@
 from pathlib import Path
+import os
 import sys
 import unittest
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'ci'))
 from platform069.skip_setup import official_values,encode_preferences,menu_entry,merge_existing
-OFFICIAL=Path('/mnt/f/UniXNU-Port-artifacts/platform069-20261118/UniXNU/scripts/seed-data-skip-setup.py')
+OFFICIAL=Path(os.environ.get('PDX071_TEST_CORE','/mnt/f/UniXNU-Port-artifacts/platform069-20261118/UniXNU'))/'scripts/seed-data-skip-setup.py'
 
 
 class OfficialSkipSetup(unittest.TestCase):

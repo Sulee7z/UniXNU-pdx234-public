@@ -26,3 +26,8 @@ their own source license. The repository-level license does not replace those
 notices. Upstream component selection and actual local exports are recorded
 separately because some local builds use newer component pins than the root
 bootstrap resolver.
+
+Public CI validates the exact selected-source hashes and the tests that use
+public inputs. Two integration suites report their missing private IPSW and
+handset fixtures as skipped. They execute with all assertions in the local
+handoff environment. CI does not claim a hardware result or a full image build.

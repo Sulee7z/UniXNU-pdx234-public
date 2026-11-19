@@ -12,6 +12,8 @@ radio_adt = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(radio_adt)
 
 
+@unittest.skipUnless(radio_adt.BASE_ADT.is_file() and radio_adt.LIVE_DTB.is_file(),
+                     'Requires the private D27 ADT and captured Sony firmware fixtures')
 class SonyRadioAdt069Tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
